@@ -13,7 +13,6 @@
     <style>
         body {
             font-family: open_sans;
-            min-width: 980px;
         }
 
     </style>
@@ -24,7 +23,7 @@
             $('#tog').click(function () {
                 if (hide == 0) {
                     $('#mynav').hide();
-                    $('.xblock').removeClass("  col-xs-10   col-sm-10  col-md-10  col-lg-10");
+                    $('.xblock').removeClass("  col-xs-11   col-sm-11  col-md-10  col-lg-10");
                     $('.xblock').addClass(" col-xs-12 col-sm-12 col-md-12 col-lg-12");
                     $('.xblock').css("margin", "0px 8px 0px 7px");
 
@@ -33,7 +32,7 @@
                 else {
                     $('#mynav').show();
                     $('.xblock').removeClass(" col-xs-12 col-sm-12 col-md-12 col-lg-12");
-                    $('.xblock').addClass(" col-xs-10   col-sm-10  col-md-10  col-lg-10");
+                    $('.xblock').addClass(" col-xs-11   col-sm-11  col-md-10  col-lg-10");
                     $('.xblock').css("margin", "");
 
                     hide = 0;
@@ -197,7 +196,7 @@
 </head>
 
 <body>
-<div>
+<div style="position: fixed; z-index: 1;background-color: white;width:100%" >
     <button id="tog" class="glyphicon glyphicon-menu-hamburger"
             style="float: left;background-color: white;border: none;width: 40px;height: 40px" ></button>
     <h4 style="text-align: center"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
@@ -206,9 +205,9 @@
 </div>
 
 
-<div class="container-fluid ">
+<div class="container-fluid " style="padding-top: 60px">
     <div class="row">
-        <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2" style="height:1000px;padding-left: 0px;padding-right: 0px">
+        <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2" style="height:1000px;padding-left: 0px;padding-right: 0px;">
             <ul class=" nav nav-list " style="height:100%;background-color:rgb(69,69,69)">
                 <li><a id="leg" href="#" style="color: white;height: 50px;"><span
                         class="glyphicon glyphicon-user"></span> <span
@@ -222,7 +221,7 @@
             </ul>
         </div>
 
-        <div id="legtab" class=" xblock col-lg-10 col-xs-10 col-sm-10  col-md-10" style="background-color: whitesmoke;">
+        <div id="legtab" class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10" style="background-color: whitesmoke">
             <h1>Legislators</h1>
             <hr>
 
@@ -240,22 +239,22 @@
 
                         </div>
                         <div class="panel panel-default">
-                            <div class="panel-body">
+                            <div class="panel-body"  style="overflow: scroll">
 
-                                <table class=" table table-hover table-responsive">
-                                    <thead>
-                                    <tr>
+                                <table class=" table table-hover table-responsive" >
+                                    <thead >
+                                    <tr >
                                         <th>Party</th>
                                         <th>Name</th>
                                         <th>Chamber</th>
                                         <th>District</th>
                                         <th>State</th>
                                         <th>Detail</th>
-                                    </tr>
+                                    </tr >
                                     </thead>
-                                    <tbody>
+                                    <tbody >
                                     <tr dir-paginate="meal in meals| orderBy:sortType| filter:q | itemsPerPage: pageSize"
-                                        current-page="currentPage">
+                                        current-page="currentPage" style="min-width: 400px">
 
                                         <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
                                         <td>{{ meal.name }}</td>
