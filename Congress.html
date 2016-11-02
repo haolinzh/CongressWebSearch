@@ -51,6 +51,7 @@
             $scope.pageSize = 10;
             $scope.meals = [];
 
+            $scope.sortType = 'statename';
             $http({
                 method: 'GET',
                 url: 'http://congress.api.sunlightfoundation.com/legislators?apikey=4acd972a599843bd93ea4dba171a483f&per_page=all'
@@ -68,19 +69,23 @@
                             var chamber = $scope.res.data.results[i].chamber;
                             var district = $scope.res.data.results[i].district;
                             var statename = $scope.res.data.results[i].state_name;
+                            var chambertxt;
 
                             if (party == 'R') {
-                                party = "<img src='r.png' width='20px' height='20'/>";
+                                party = 'r.png';
                             }
-                            else {
-                                party = "<img src='d.png' width='20px' height='20'/>"
+                            else if(party=='D'){
+                                party =  'd.png';
                             }
 
                             if (chamber == "house") {
-                                chamber = "<img src='h.png' width='20px' height='20'/>" + " House";
+                                chamber = 'h.png';
+                                chambertxt='House'
                             }
-                            else {
-                                chamber = "<img src='s.svg' width='20px' height='20'/>" + " Senate";
+
+                            else if(chamber=='senate'){
+                                chamber = 's.svg';
+                                chambertxt='Senate';
                             }
 
                             if (district == null) {
@@ -92,7 +97,7 @@
 
 
                             var meal = {
-                                party: party, name: name, chamber: chamber, district: district, statename: statename
+                                party: party, name: name, chamber: chamber, district: district, statename: statename,chambertxt:chambertxt
                             }
                             $scope.meals.push(meal);
 
@@ -192,20 +197,19 @@
 </head>
 
 <body>
-<div class="navbar navbar-fixed-top" role="navigation" style="text-align: center;position: static">
-    <div class="container">
-        <button id="tog" class="glyphicon glyphicon-menu-hamburger"
-                style="float: left;margin: 13px;background-color: white;border: none"></button>
-        <h4 style="display: inline-block;"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
-            Congress API
-        </h4>
-    </div>
+<div>
+    <button id="tog" class="glyphicon glyphicon-menu-hamburger"
+            style="float: left;background-color: white;border: none;width: 40px;height: 40px" ></button>
+    <h4 style="text-align: center"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
+        Congress API
+    </h4>
 </div>
+
 
 <div class="container-fluid ">
     <div class="row">
-        <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2" style="height:1200px">
-            <ul class=" nav nav-list" style="width:auto;height:100%;background-color:rgb(69,69,69)">
+        <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2" style="height:1000px;padding-left: 0px;padding-right: 0px">
+            <ul class=" nav nav-list " style="height:100%;background-color:rgb(69,69,69)">
                 <li><a id="leg" href="#" style="color: white;height: 50px;"><span
                         class="glyphicon glyphicon-user"></span> <span
                         class="hidden-xs hidden-sm">Legislators</span></a></li>
@@ -218,110 +222,108 @@
             </ul>
         </div>
 
-        <div id="legtab" class=" xblock col-lg-10 col-xs-10 col-sm-10  col-md-10">
+        <div id="legtab" class=" xblock col-lg-10 col-xs-10 col-sm-10  col-md-10" style="background-color: whitesmoke;">
             <h1>Legislators</h1>
             <hr>
 
-            <div>
-                <ul class="nav nav-tabs">
+            <div style="border: solid 1px lightgray;border-radius: 5px ">
+                <ul class="nav nav-tabs" style="background-color: white">
                     <li id="tab11" class="active"><a data-toggle="tab" href="#11">By state</a></li>
                     <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
                     <li id="tab13"><a data-toggle="tab" href="#13">Senate</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="11" class="tab-pane fade in active">
-                        <div ng-controller="MyController">
-                            <div class="well"><span>Legislators By State</span>
-                                <input type="text" ng-model="q" id="search11" class="form-control"
-                                       placeholder="Filter text">
+                    <div id="11" class="tab-pane fade in active" ng-controller="MyController">
+                        <div class="well" style="margin: 0;"><span>Legislators By State</span>
+                            <input type="text" ng-model="q" id="search11" class="form-control"
+                                   placeholder="Filter text">
 
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <table class=" table table-hover table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>Party</th>
+                                        <th>Name</th>
+                                        <th>Chamber</th>
+                                        <th>District</th>
+                                        <th>State</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr dir-paginate="meal in meals| orderBy:sortType| filter:q | itemsPerPage: pageSize"
+                                        current-page="currentPage">
+
+                                        <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
+                                        <td>{{ meal.name }}</td>
+                                        <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{ meal.chambertxt }}</td>
+                                        <td>{{ meal.district}}</td>
+                                        <td>{{ meal.statename}}</td>
+                                        <td>
+                                            <button class='btn btn-primary'>View Detail</button>
+                                        </td>
+                                    <tr>
+                                    <tbody>
+
+                                </table>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals | filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage">
-                                            <td>{{ meal.party }}</td>
-                                            <td>{{ meal.name }}</td>
-                                            <td>{{ meal.chamber }}</td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChangeHandler(newPageNumber)"
-                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                                </div>
+                        </div>
+                        <div ng-controller="OtherController">
+                            <div class="text-center">
+                                <dir-pagination-controls boundary-links="true"
+                                                         on-page-change="pageChangeHandler(newPageNumber)"
+                                                         template-url="dirPagination.tpl.html"></dir-pagination-controls>
                             </div>
                         </div>
 
 
                     </div>
-                    <div id="12" class="tab-pane fade ">
-                        <div ng-controller="MyController2">
-                            <div class="well">Legislators By House
-                                <input type="text" ng-model="q" id="search12" class="form-control"
-                                       placeholder="Filter text">
+                    <div id="12" class="tab-pane fade " ng-controller="MyController2">
 
+                        <div class="well">Legislators By House
+                            <input type="text" ng-model="q" id="search12" class="form-control"
+                                   placeholder="Filter text">
+
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <table class=" table table-hover table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>Party</th>
+                                        <th>Name</th>
+                                        <th>Chamber</th>
+                                        <th>District</th>
+                                        <th>State</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr dir-paginate="meal in meals | filter:q | itemsPerPage: pageSize"
+                                        current-page="currentPage">
+                                        <td>{{ meal.party }}</td>
+                                        <td>{{ meal.name }}</td>
+                                        <td>{{ meal.chamber }}</td>
+                                        <td>{{ meal.district}}</td>
+                                        <td>{{ meal.statename}}</td>
+                                        <td>
+                                            <button class='btn btn-primary'>View Detail</button>
+                                        </td>
+                                    <tr>
+                                    <tbody>
+
+                                </table>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals | filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage">
-                                            <td>{{ meal.party }}</td>
-                                            <td>{{ meal.name }}</td>
-                                            <td>{{ meal.chamber }}</td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController2">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChangeHandler(newPageNumber)"
-                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                                </div>
+                        </div>
+                        <div ng-controller="OtherController2">
+                            <div class="text-center">
+                                <dir-pagination-controls boundary-links="true"
+                                                         on-page-change="pageChangeHandler(newPageNumber)"
+                                                         template-url="dirPagination.tpl.html"></dir-pagination-controls>
                             </div>
                         </div>
 
