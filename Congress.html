@@ -23,17 +23,17 @@
         $(document).ready(function () {
             $('#tog').click(function () {
                 if (hide == 0) {
-                    $('.col-xs-2').hide();
-                    $('.xblock').removeClass("  col-xs-10 ");
-                    $('.xblock').addClass(" col-xs-12");
+                    $('#mynav').hide();
+                    $('.xblock').removeClass("  col-xs-10   col-sm-10  col-md-10  col-lg-10");
+                    $('.xblock').addClass(" col-xs-12 col-sm-12 col-md-12 col-lg-12");
                     $('.xblock').css("margin", "0px 8px 0px 7px");
 
                     hide = 1;
                 }
                 else {
-                    $('.col-xs-2').show();
-                    $('.xblock').removeClass(" col-xs-12");
-                    $('.xblock').addClass(" col-xs-10 ");
+                    $('#mynav').show();
+                    $('.xblock').removeClass(" col-xs-12 col-sm-12 col-md-12 col-lg-12");
+                    $('.xblock').addClass(" col-xs-10   col-sm-10  col-md-10  col-lg-10");
                     $('.xblock').css("margin", "");
 
                     hide = 0;
@@ -43,6 +43,7 @@
 
 
         var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination']);
+
 
         function MyController($scope, $http) {
 
@@ -69,10 +70,10 @@
                             var statename = $scope.res.data.results[i].state_name;
 
                             if (party == 'R') {
-                                party = "\"<img src='r.png' width='20px' height='20'>\"";
+                                party = "<img src='r.png' width='20px' height='20'/>";
                             }
                             else {
-                                party = "<img src='d.png' width='20px' height='20'>"
+                                party = "<img src='d.png' width='20px' height='20'/>"
                             }
 
                             if (chamber == "house") {
@@ -114,43 +115,114 @@
             };
         }
 
+        function MyController2($scope, $http) {
+
+            $scope.currentPage = 1;
+            $scope.pageSize = 10;
+            $scope.meals = [];
+
+            $http({
+                method: 'GET',
+                url: 'http://congress.api.sunlightfoundation.com/legislators?chamber=house&apikey=4acd972a599843bd93ea4dba171a483f&per_page=all'
+            }).then(
+                    function successCallback(response) {
+
+                        $scope.res = angular.fromJson(response);
+                        var len = $scope.res.data.results.length;
+                        var x = $scope.res.data.results[0].chamber;
+                        for (i = 0; i < len; i++) {
+                            var party = $scope.res.data.results[i].party;
+                            var lastname = $scope.res.data.results[i].last_name;
+                            var firstname = $scope.res.data.results[i].first_name;
+                            var name = lastname + ", " + firstname;
+                            var chamber = $scope.res.data.results[i].chamber;
+                            var district = $scope.res.data.results[i].district;
+                            var statename = $scope.res.data.results[i].state_name;
+
+                            if (party == 'R') {
+                                party = "<img src='r.png' width='20px' height='20'/>";
+                            }
+                            else {
+                                party = "<img src='d.png' width='20px' height='20'/>"
+                            }
+
+                            if (chamber == "house") {
+                                chamber = "<img src='h.png' width='20px' height='20'/>" + " House";
+                            }
+                            else {
+                                chamber = "<img src='s.svg' width='20px' height='20'/>" + " Senate";
+                            }
+
+                            if (district == null) {
+                                district = "N.A.";
+                            }
+                            else {
+                                district = "District " + district;
+                            }
+
+
+                            var meal = {
+                                party: party, name: name, chamber: chamber, district: district, statename: statename
+                            }
+                            $scope.meals.push(meal);
+
+                        }
+
+                    }, function errorCallback(response) {
+
+                    }
+            );
+
+
+            $scope.pageChangeHandler = function (num) {
+                console.log('meals page changed to ' + num);
+            };
+        }
+
+        function OtherController2($scope) {
+            $scope.pageChangeHandler = function (num) {
+                console.log('going to page ' + num);
+            };
+        }
         AJApp.controller('MyController', MyController);
         AJApp.controller('OtherController', OtherController);
-
+        AJApp.controller('MyController2', MyController2);
+        AJApp.controller('OtherController2', OtherController2);
     </script>
 </head>
 
 <body>
-<div class="page-header-sm " style="text-align: center;">
-    <button id="tog" class="glyphicon glyphicon-menu-hamburger"
-            style="float: left;margin: 13px;background-color: white;border: none"></button>
-    <h4 style="display: inline-block;"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
-        Congress API
-    </h4>
+<div class="navbar navbar-fixed-top" role="navigation" style="text-align: center;position: static">
+    <div class="container">
+        <button id="tog" class="glyphicon glyphicon-menu-hamburger"
+                style="float: left;margin: 13px;background-color: white;border: none"></button>
+        <h4 style="display: inline-block;"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
+            Congress API
+        </h4>
+    </div>
 </div>
 
-
-<div class="container-fluid " style="padding-left: 0px">
+<div class="container-fluid ">
     <div class="row">
-        <div class="col-xs-2" style="height: 1200px;display: inline-block">
-            <ul class=" nav nav-list" style="width:auto;height: 100%;background-color:rgb(69,69,69)">
+        <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2" style="height:1200px">
+            <ul class=" nav nav-list" style="width:auto;height:100%;background-color:rgb(69,69,69)">
                 <li><a id="leg" href="#" style="color: white;height: 50px;"><span
-                        class="glyphicon glyphicon-user"></span> Legislators</a></li>
+                        class="glyphicon glyphicon-user"></span> <span
+                        class="hidden-xs hidden-sm">Legislators</span></a></li>
                 <li><a id="bill" href="#" style="color: white;height: 50px;"><span
-                        class="glyphicon glyphicon-file"></span> Bills</a></li>
+                        class="glyphicon glyphicon-file"></span><span class="hidden-xs hidden-sm"> Bills</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-log-in"></span>
-                    Committees</a></li>
+                    <span class="hidden-xs hidden-sm"> Comittees</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-star"></span>
-                    Favorites</a></li>
+                    <span class="hidden-xs hidden-sm"> Favorites</span></a></li>
             </ul>
         </div>
 
-        <div id="legtab" class="xblock   col-xs-10 " style="display: inline-block">
+        <div id="legtab" class=" xblock col-lg-10 col-xs-10 col-sm-10  col-md-10">
             <h1>Legislators</h1>
             <hr>
 
-            <div class="col">
-
+            <div>
                 <ul class="nav nav-tabs">
                     <li id="tab11" class="active"><a data-toggle="tab" href="#11">By state</a></li>
                     <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
@@ -159,8 +231,9 @@
                 <div class="tab-content">
                     <div id="11" class="tab-pane fade in active">
                         <div ng-controller="MyController">
-                            <div class="well">Legislators By State
-                                <input type="text" ng-model="q" id="search11" class="form-control" placeholder="Filter text">
+                            <div class="well"><span>Legislators By State</span>
+                                <input type="text" ng-model="q" id="search11" class="form-control"
+                                       placeholder="Filter text">
 
                             </div>
                             <div class="panel panel-default">
@@ -194,20 +267,22 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-
-                        <div ng-controller="OtherController">
-                            <div class="text-center">
-                                <dir-pagination-controls boundary-links="true"
-                                                         on-page-change="pageChangeHandler(newPageNumber)"
-                                                         template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                            <div ng-controller="OtherController">
+                                <div class="text-center">
+                                    <dir-pagination-controls boundary-links="true"
+                                                             on-page-change="pageChangeHandler(newPageNumber)"
+                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                     <div id="12" class="tab-pane fade ">
-                        <div ng-controller="MyController">
+                        <div ng-controller="MyController2">
                             <div class="well">Legislators By House
-                                <input type="text" ng-model="q" id="search12" class="form-control" placeholder="Filter text">
+                                <input type="text" ng-model="q" id="search12" class="form-control"
+                                       placeholder="Filter text">
 
                             </div>
                             <div class="panel panel-default">
@@ -241,63 +316,18 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-
-                        <div ng-controller="OtherController">
-                            <div class="text-center">
-                                <dir-pagination-controls boundary-links="true"
-                                                         on-page-change="pageChangeHandler(newPageNumber)"
-                                                         template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="13" class="tab-pane fade">
-                        <div ng-controller="MyController">
-                            <div class="well">Legislators By Senate
-                                <input type="text" ng-model="q" id="search13" class="form-control" placeholder="Filter text" style="display: inline-block;float: right">
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals | filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage">
-                                            <td>{{ meal.party }}</td>
-                                            <td>{{ meal.name }}</td>
-                                            <td>{{ meal.chamber }}</td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
+                            <div ng-controller="OtherController2">
+                                <div class="text-center">
+                                    <dir-pagination-controls boundary-links="true"
+                                                             on-page-change="pageChangeHandler(newPageNumber)"
+                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
                                 </div>
                             </div>
                         </div>
 
-                        <div ng-controller="OtherController">
-                            <div class="text-center">
-                                <dir-pagination-controls boundary-links="true"
-                                                         on-page-change="pageChangeHandler(newPageNumber)"
-                                                         template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                            </div>
-                        </div>
+
                     </div>
+
                 </div>
 
             </div>
