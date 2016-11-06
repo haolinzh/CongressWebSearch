@@ -43,31 +43,83 @@
 
         var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination']);
 
+        AJApp.controller('contentcontroller', Controller);
 
-        function MyController(type) {
+        function Controller($scope, $http) {
 
-            return function ($scope, $http) {
+            $scope.pageSize = 10;
+            $scope.currentPage = 1;
+            $scope.meals = [];
 
-                $scope.pageSize = 10;
-                $scope.currentPage = 1;
+            $http({
+                method: 'GET',
+                url: 'CongressServer.php',
+                params: {request: 'reqlegislator'}
 
+            }).then(
+                    function successCallback(response) {
+                        $scope.meals = [];
+
+                        $scope.res = angular.fromJson(response);
+                        var len = $scope.res.data.results.length;
+                        for (i = 0; i < len; i++) {
+                            var party = $scope.res.data.results[i].party;
+                            var lastname = $scope.res.data.results[i].last_name;
+                            var firstname = $scope.res.data.results[i].first_name;
+                            var name = lastname + ", " + firstname;
+                            var chamber = $scope.res.data.results[i].chamber;
+                            var district = $scope.res.data.results[i].district;
+                            var statename = $scope.res.data.results[i].state_name;
+                            var chambertxt;
+
+                            if (party == 'R') {
+                                party = 'r.png';
+                            }
+                            else if (party == 'D') {
+                                party = 'd.png';
+                            }
+
+                            if (chamber == "house") {
+                                chamber = 'h.png';
+                                chambertxt = 'House'
+                            }
+
+                            else if (chamber == 'senate') {
+                                chamber = 's.svg';
+                                chambertxt = 'Senate';
+                            }
+
+                            if (district == null) {
+                                district = "N.A.";
+                            }
+                            else {
+                                district = "District " + district;
+                            }
+
+
+                            var meal = {
+                                party: party,
+                                name: name,
+                                chamber: chamber,
+                                district: district,
+                                statename: statename,
+                                chambertxt: chambertxt
+                            };
+                            $scope.meals.push(meal);
+
+                        }
+
+                    }, function errorCallback(response) {
+
+                    }
+            );
+
+            $scope.sbstate = function () {
                 $scope.meals = [];
-
-                var requrl;
-                var url1 = 'http://congress.api.sunlightfoundation.com/legislators?apikey=4acd972a599843bd93ea4dba171a483f&per_page=all';
-                var url2 = 'http://congress.api.sunlightfoundation.com/legislators?chamber=house&apikey=4acd972a599843bd93ea4dba171a483f&per_page=all';
-                var url3 = 'http://congress.api.sunlightfoundation.com/legislators?chamber=senate&apikey=4acd972a599843bd93ea4dba171a483f&per_page=all';
-
-                if (type == 't1')
-                    requrl = url1;
-                else if (type == 't2')
-                    requrl = url2;
-                else if (type == 't3')
-                    requrl = url3;
-
                 $http({
                     method: 'GET',
-                    url: requrl
+                    url: 'CongressServer.php',
+                    params: {request: 'reqlegislator'}
                 }).then(
                         function successCallback(response) {
 
@@ -124,14 +176,232 @@
 
                         }
                 );
-
-
-                $scope.pageChangeHandler = function (num) {
-                    console.log('meals page changed to ' + num);
-                };
-
             };
 
+            $scope.sbhouse = function () {
+                $scope.meals = [];
+                $http({
+                    method: 'GET',
+                    url: 'CongressServer.php',
+                    params: {request: 'reqlegislator', chamber: 'house'}
+                }).then(
+                        function successCallback(response) {
+
+                            $scope.res = angular.fromJson(response);
+                            var len = $scope.res.data.results.length;
+                            for (i = 0; i < len; i++) {
+                                var party = $scope.res.data.results[i].party;
+                                var lastname = $scope.res.data.results[i].last_name;
+                                var firstname = $scope.res.data.results[i].first_name;
+                                var name = lastname + ", " + firstname;
+                                var chamber = $scope.res.data.results[i].chamber;
+                                var district = $scope.res.data.results[i].district;
+                                var statename = $scope.res.data.results[i].state_name;
+                                var chambertxt;
+
+                                if (party == 'R') {
+                                    party = 'r.png';
+                                }
+                                else if (party == 'D') {
+                                    party = 'd.png';
+                                }
+
+                                if (chamber == "house") {
+                                    chamber = 'h.png';
+                                    chambertxt = 'House'
+                                }
+
+                                else if (chamber == 'senate') {
+                                    chamber = 's.svg';
+                                    chambertxt = 'Senate';
+                                }
+
+                                if (district == null) {
+                                    district = "N.A.";
+                                }
+                                else {
+                                    district = "District " + district;
+                                }
+
+
+                                var meal = {
+                                    party: party,
+                                    name: name,
+                                    chamber: chamber,
+                                    district: district,
+                                    statename: statename,
+                                    chambertxt: chambertxt
+                                };
+                                $scope.meals.push(meal);
+
+                            }
+
+                        }, function errorCallback(response) {
+
+                        }
+                );
+            };
+
+            $scope.sbsenate = function () {
+                $scope.meals = [];
+                $http({
+                    method: 'GET',
+                    url: 'CongressServer.php',
+                    params: {request: 'reqlegislator', chamber: 'senate'}
+                }).then(
+                        function successCallback(response) {
+
+                            $scope.res = angular.fromJson(response);
+                            var len = $scope.res.data.results.length;
+                            for (i = 0; i < len; i++) {
+                                var party = $scope.res.data.results[i].party;
+                                var lastname = $scope.res.data.results[i].last_name;
+                                var firstname = $scope.res.data.results[i].first_name;
+                                var name = lastname + ", " + firstname;
+                                var chamber = $scope.res.data.results[i].chamber;
+                                var district = $scope.res.data.results[i].district;
+                                var statename = $scope.res.data.results[i].state_name;
+                                var chambertxt;
+
+                                if (party == 'R') {
+                                    party = 'r.png';
+                                }
+                                else if (party == 'D') {
+                                    party = 'd.png';
+                                }
+
+                                if (chamber == "house") {
+                                    chamber = 'h.png';
+                                    chambertxt = 'House'
+                                }
+
+                                else if (chamber == 'senate') {
+                                    chamber = 's.svg';
+                                    chambertxt = 'Senate';
+                                }
+
+                                if (district == null) {
+                                    district = "N.A.";
+                                }
+                                else {
+                                    district = "District " + district;
+                                }
+
+
+                                var meal = {
+                                    party: party,
+                                    name: name,
+                                    chamber: chamber,
+                                    district: district,
+                                    statename: statename,
+                                    chambertxt: chambertxt
+                                };
+                                $scope.meals.push(meal);
+
+                            }
+
+                        }, function errorCallback(response) {
+
+                        }
+                );
+            };
+
+            $scope.sacbill = function () {
+                $scope.meals = [];
+                $http({
+                    method: 'GET',
+                    url: 'CongressServer.php',
+                    params: {request: 'reqbills',active:'true'}
+                }).then(
+                        function successCallback(response) {
+
+                            $scope.res = angular.fromJson(response);
+                            var len = $scope.res.data.results.length;
+                            for (i = 0; i < len; i++) {
+                                var billid = $scope.res.data.results[i].bill_id;
+                                var billtype = $scope.res.data.results[i].bill_type;
+                                var chamber = $scope.res.data.results[i].chamber;
+                                var introducted = $scope.res.data.results[i].introduced_on;
+                                var sponsor = $scope.res.data.results[i].first_name;
+
+                                if (chamber == "house") {
+                                    chamber = 'h.png';
+                                    chambertxt = 'House'
+                                }
+
+                                else if (chamber == 'senate') {
+                                    chamber = 's.svg';
+                                    chambertxt = 'Senate';
+                                }
+
+
+                                var meal = {
+                                    billid: billid,
+                                    billtype: billtype,
+                                    chamber: chamber,
+                                    introducted:introducted,
+                                    sponsor: sponsor,
+                                    chambertxt: chambertxt
+                                };
+                                $scope.meals.push(meal);
+
+                            }
+
+                        }, function errorCallback(response) {
+
+                        }
+                );
+            };
+            $scope.snewbill = function () {
+                $scope.meals = [];
+                $http({
+                    method: 'GET',
+                    url: 'CongressServer.php',
+                    params: {request: 'reqbills'}
+                }).then(
+                        function successCallback(response) {
+
+                            $scope.res = angular.fromJson(response);
+                            var len = $scope.res.data.results.length;
+                            for (i = 0; i < len; i++) {
+                                var billid = $scope.res.data.results[i].bill_id;
+                                var billtype = $scope.res.data.results[i].bill_type;
+                                var chamber = $scope.res.data.results[i].chamber;
+                                var introducted = $scope.res.data.results[i].introduced_on;
+                                var sponsor = $scope.res.data.results[i].first_name;
+
+                                if (chamber == "house") {
+                                    chamber = 'h.png';
+                                    chambertxt = 'House'
+                                }
+
+                                else if (chamber == 'senate') {
+                                    chamber = 's.svg';
+                                    chambertxt = 'Senate';
+                                }
+
+
+                                var meal = {
+                                    billid: billid,
+                                    billtype: billtype,
+                                    chamber: chamber,
+                                    introducted:introducted,
+                                    sponsor: sponsor,
+                                    chambertxt: chambertxt
+                                };
+                                $scope.meals.push(meal);
+
+                            }
+
+                        }, function errorCallback(response) {
+
+                        }
+                );
+            };
+
+            $scope.pageChangeHandler = function (num) {
+                console.log('meals page changed to ' + num);
+            };
 
         }
 
@@ -142,9 +412,6 @@
         }
 
 
-        AJApp.controller('Type1Ctrl', ['$scope', '$http', MyController('t1')]);
-        AJApp.controller('Type2Ctrl', ['$scope', '$http', MyController('t2')]);
-        AJApp.controller('Type3Ctrl', ['$scope', '$http', MyController('t3')]);
         AJApp.controller('OtherController', OtherController);
 
     </script>
@@ -165,10 +432,11 @@
         <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2"
              style="height:1000px;padding-left: 0px;padding-right: 0px;">
             <ul class=" nav navbar-fixed-left" style="height:100%;background-color:rgb(69,69,69)">
-                <li><a id="leg"  data-toggle="tab" href="#legtab" style="color: white;height: 50px;"><span
+                <li><a id="leg" data-toggle="tab" href="#legtab" ng-click="sbstate()" style="color: white;height: 50px;"><span
                         class="glyphicon glyphicon-user"></span> <span
                         class="hidden-xs hidden-sm">Legislators</span></a></li>
-                <li><a id="bill" data-toggle="tab" href="#billtab" style="color: white;height: 50px;"><span
+                <li><a id="bill" data-toggle="tab" href="#billtab" ng-click="sacbill()"
+                       style="color: white;height: 50px;"><span
                         class="glyphicon glyphicon-file"></span><span class="hidden-xs hidden-sm"> Bills</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-log-in"></span>
                     <span class="hidden-xs hidden-sm"> Comittees</span></a></li>
@@ -176,174 +444,224 @@
                     <span class="hidden-xs hidden-sm"> Favorites</span></a></li>
             </ul>
         </div>
-        <div class="tab-content">
+        <div class="tab-content" ng-controller="contentcontroller">
             <div id="legtab" class=" tab-pane fade in active  xblock col-lg-10 col-xs-11 col-sm-11  col-md-10"
                  style="background-color: whitesmoke">
                 <h1>Legislators</h1>
-                <hr>
+                    <hr>
 
-                <div style="border: solid 1px lightgray;border-radius: 5px ">
-                    <ul class="nav nav-tabs" style="background-color: white">
-                        <li id="tab11" class="active"><a data-toggle="tab" href="#11">By state</a></li>
-                        <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
-                        <li id="tab13"><a data-toggle="tab" href="#13">Senate</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="11" class="tab-pane fade in active" ng-controller="Type1Ctrl">
-                            <div class="well" style="margin: 0;">Legislators By State
-                                <span> <input type="text" ng-model="q" id="search11" class="form-control"
-                                              placeholder="Search"
-                                              ></span>
+                    <div style="border: solid 1px lightgray;border-radius: 5px ">
+                        <ul class="nav nav-tabs" style="background-color: white">
+                            <li id="tab11" class="active"><a data-toggle="tab" href="#11" ng-click="sbstate()">By state</a>
+                            </li>
+                            <li id="tab12"><a data-toggle="tab" href="#12" ng-click="sbhouse()">House</a></li>
+                            <li id="tab13"><a data-toggle="tab" href="#13" ng-click="sbsenate()">Senate</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="11" class="tab-pane fade in active">
+                                <div class="well" style="margin: 0;"><span class=>Legislators <br class="visible-xs">By State</span>
+                                    <select style="float: right" ng-model="q" id="sel1">
+                                        <option value="">All States</option>
+                                        <option value="Alabama">Alabama</option>
+                                        <option value="Alaska">Alaska</option>
+                                        <option value="Arizona">Arizona</option>
+                                        <option value="Arkansas">Arkansas</option>
+                                        <option value="California">California</option>
+                                        <option value="Colorado">Colorado</option>
+                                        <option value="Connecticut">Connecticut</option>
+                                        <option value="Delaware">Delaware</option>
+                                        <option value="District Of Columbia">District Of Columbia</option>
+                                        <option value="Florida">Florida</option>
+                                        <option value="Georgia">Georgia</option>
+                                        <option value="Hawaii">Hawaii</option>
+                                        <option value="Idaho">Idaho</option>
+                                        <option value="Illinois">Illinois</option>
+                                        <option value=">Indiana">Indiana</option>
+                                        <option value="Iowa">Iowa</option>
+                                        <option value="Kansas">Kansas</option>
+                                        <option value="Kentucky">Kentucky</option>
+                                        <option value="Louisiana">Louisiana</option>
+                                        <option value="Maine">Maine</option>
+                                        <option value="Maryland">Maryland</option>
+                                        <option value="Massachusetts">Massachusetts</option>
+                                        <option value="Michigan">Michigan</option>
+                                        <option value="Minnesota">Minnesota</option>
+                                        <option value="Mississippi">Mississippi</option>
+                                        <option value="Missouri">Missouri</option>
+                                        <option value="Montana">Montana</option>
+                                        <option value="Nebraska">Nebraska</option>
+                                        <option value="Nevada">Nevada</option>
+                                        <option value="New Hampshire">New Hampshire</option>
+                                        <option value="New Jersey">New Jersey</option>
+                                        <option value="New Mexico">New Mexico</option>
+                                        <option value="New York">New York</option>
+                                        <option value="North Carolina">North Carolina</option>
+                                        <option value="North Dakota">North Dakota</option>
+                                        <option value="Ohio">Ohio</option>
+                                        <option value="Oklahoma">Oklahoma</option>
+                                        <option value="Oregon">Oregon</option>
+                                        <option value="Pennsylvania">Pennsylvania</option>
+                                        <option value="Rhode Island">Rhode Island</option>
+                                        <option value="South Carolina">South Carolina</option>
+                                        <option value="South Dakota">South Dakota</option>
+                                        <option value="Tennessee">Tennessee</option>
+                                        <option value="Texas">Texas</option>
+                                        <option value="Utah">Utah</option>
+                                        <option value="Vermont">Vermont</option>
+                                        <option value="Virginia">Virginia</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="West Virginia">West Virginia</option>
+                                        <option value="Wisconsin">Wisconsin</option>
+                                        <option value="Wyoming">Wyoming</option>
+                                    </select>
 
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals| orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage" style="min-width: 400px">
-
-                                            <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
-                                            <td>{{ meal.name }}</td>
-                                            <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
-                                                meal.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
                                 </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChangeHandler(newPageNumber)"
-                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="overflow: scroll">
+
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th>Party</th>
+                                                <th>Name</th>
+                                                <th>Chamber</th>
+                                                <th>District</th>
+                                                <th>State</th>
+                                                <th>Detail</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="meal in meals| orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
+                                                current-page="currentPage" style="min-width: 400px">
+
+                                                <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
+                                                <td style="white-space: nowrap">{{ meal.name }}</td>
+                                                <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
+                                                    meal.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ meal.district}}</td>
+                                                <td>{{ meal.statename}}</td>
+                                                <td>
+                                                    <button class='btn btn-primary'>View Detail</button>
+                                                </td>
+                                            <tr>
+                                            <tbody>
+
+                                        </table>
+                                    </div>
                                 </div>
+                                <div ng-controller="OtherController">
+                                    <div class="text-center">
+                                        <dir-pagination-controls boundary-links="true"
+                                                                 on-page-change="pageChangeHandler(newPageNumber)"
+                                                                 template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                                    </div>
+                                </div>
+
+
                             </div>
+                            <div id="12" class="tab-pane fade">
+                                <div class="well" style="margin: 0;"><span>Legislators <br class="visible-xs">By House</span>
+                                    <input type="text" ng-model="q" id="search12" class="form-control"
+                                           placeholder="Search">
+
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="overflow: scroll">
+
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th>Party</th>
+                                                <th>Name</th>
+                                                <th>Chamber</th>
+                                                <th>District</th>
+                                                <th>State</th>
+                                                <th>Detail</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="meal in meals|orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
+                                                current-page="currentPage" style="min-width: 400px">
+
+                                                <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
+                                                <td style="white-space: nowrap">{{ meal.name }}</td>
+                                                <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
+                                                    meal.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ meal.district}}</td>
+                                                <td>{{ meal.statename}}</td>
+                                                <td>
+                                                    <button class='btn btn-primary'>View Detail</button>
+                                                </td>
+                                            <tr>
+                                            <tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div ng-controller="OtherController">
+                                    <div class="text-center">
+                                        <dir-pagination-controls boundary-links="true"
+                                                                 on-page-change="pageChangeHandler(newPageNumber)"
+                                                                 template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                                    </div>
+                                </div>
 
 
+                            </div>
+                            <div id="13" class="tab-pane fade">
+                                <div class="well" style="margin: 0;"><span>Legislators <br class="visible-xs">By Senate</span>
+                                    <input type="text" ng-model="q" id="search13" class="form-control"
+                                           placeholder="Search">
+
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="overflow: scroll">
+
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th>Party</th>
+                                                <th>Name</th>
+                                                <th>Chamber</th>
+                                                <th>State</th>
+                                                <th>Detail</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="meal in meals| orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
+                                                current-page="currentPage" style="min-width: 400px">
+
+                                                <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
+                                                <td style="white-space: nowrap">{{ meal.name }}</td>
+                                                <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
+                                                    meal.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ meal.statename}}</td>
+                                                <td>
+                                                    <button class='btn btn-primary'>View Detail</button>
+                                                </td>
+                                            <tr>
+                                            <tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div ng-controller="OtherController">
+                                    <div class="text-center">
+                                        <dir-pagination-controls boundary-links="true"
+                                                                 on-page-change="pageChangeHandler(newPageNumber)"
+                                                                 template-url="dirPagination.tpl.html"></dir-pagination-controls>
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
-                        <div id="12" class="tab-pane fade" ng-controller="Type2Ctrl">
-                            <div class="well" style="margin: 0;"><span>Legislators By House</span>
-                                <input type="text" ng-model="q" id="search12" class="form-control"
-                                       placeholder="Search">
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals|orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage" style="min-width: 400px">
-
-                                            <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
-                                            <td>{{ meal.name }}</td>
-                                            <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
-                                                meal.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChangeHandler(newPageNumber)"
-                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div id="13" class="tab-pane fade" ng-controller="Type3Ctrl">
-                            <div class="well" style="margin: 0;"><span>Legislators By Senate</span>
-                                <input type="text" ng-model="q" id="search13" class="form-control"
-                                       placeholder="Search" >
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="meal in meals| orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
-                                            current-page="currentPage" style="min-width: 400px">
-
-                                            <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
-                                            <td>{{ meal.name }}</td>
-                                            <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
-                                                meal.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             on-page-change="pageChangeHandler(newPageNumber)"
-                                                             template-url="dirPagination.tpl.html"></dir-pagination-controls>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -354,16 +672,15 @@
 
                 <div style="border: solid 1px lightgray;border-radius: 5px ">
                     <ul class="nav nav-tabs" style="background-color: white">
-                        <li id="tab21" class="active"><a data-toggle="tab" href="#11">Active Bills</a></li>
-                        <li id="tab22"><a data-toggle="tab" href="#12">New Bills</a></li>
-
+                        <li id="tab21" class="active"><a data-toggle="tab" href="#21" ng-click="sacbill()">Active Bills</a>
+                        </li>
+                        <li id="tab22"><a data-toggle="tab" href="#22" ng-click="snewbill()">New Bills</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div id="21" class="tab-pane fade in active" ng-controller="Bill1Ctrl">
-                            <div class="well" style="margin: 0;">Legislators By State
-                                <span> <input type="text" ng-model="q" id="search21" class="form-control"
-                                              placeholder="Search"
-                                              ></span>
+                        <div id="21" class="tab-pane fade in active">
+                            <div class="well" style="margin: 0;"><span class=>Active <br class="visible-xs">Bills</span>
+                                <input type="text" ng-model="q" id="search21" class="form-control"
+                                       placeholder="Search">
 
                             </div>
                             <div class="panel panel-default">
@@ -372,26 +689,25 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
+                                            <th>Bill ID</th>
+                                            <th>Bill Type</th>
                                             <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
+                                            <th>Introducted on</th>
+                                            <th>Sponsor</th>
                                             <th>Detail</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr dir-paginate="meal in meals| orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
+                                        <tr dir-paginate="meal in meals| orderBy:'billid'| filter:q | itemsPerPage: pageSize"
                                             current-page="currentPage" style="min-width: 400px">
-
-                                            <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
-                                            <td>{{ meal.name }}</td>
+                                            <td>{{ meal.billid}}</td>
+                                            <td>{{ meal.billtype}}</td>
                                             <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
                                                 meal.chambertxt
                                                 }}
                                             </td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
+                                            <td>{{ meal.introducted}}</td>
+                                            <td>{{ meal.sponsor}}</td>
                                             <td>
                                                 <button class='btn btn-primary'>View Detail</button>
                                             </td>
@@ -411,10 +727,10 @@
 
 
                         </div>
-                        <div id="22" class="tab-pane fade" ng-controller="Bill2Ctrl">
-                            <div class="well" style="margin: 0;"><span>Legislators By House</span>
+                        <div id="22" class="tab-pane fade">
+                            <div class="well" style="margin: 0;"><span>New <br class="visible-xs">Bills</span>
                                 <input type="text" ng-model="q" id="search22" class="form-control"
-                                       placeholder="Search" >
+                                       placeholder="Search">
 
                             </div>
                             <div class="panel panel-default">
@@ -423,26 +739,25 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
+                                            <th>Bill ID</th>
+                                            <th>Bill Type</th>
                                             <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
+                                            <th>Introducted on</th>
+                                            <th>Sponsor</th>
                                             <th>Detail</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr dir-paginate="meal in meals|orderBy:['statename','name']| filter:q | itemsPerPage: pageSize"
                                             current-page="currentPage" style="min-width: 400px">
-
-                                            <td><img src='{{ meal.party }}' width='20px' height='20'/></td>
-                                            <td>{{ meal.name }}</td>
+                                            <td>{{ meal.billid}}</td>
+                                            <td>{{ meal.billtype}}</td>
                                             <td><img src='{{ meal.chamber }}' width='20px' height='20'/> {{
                                                 meal.chambertxt
                                                 }}
                                             </td>
-                                            <td>{{ meal.district}}</td>
-                                            <td>{{ meal.statename}}</td>
+                                            <td>{{ meal.introducted}}</td>
+                                            <td>{{ meal.sponsor}}</td>
                                             <td>
                                                 <button class='btn btn-primary'>View Detail</button>
                                             </td>
@@ -466,6 +781,7 @@
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
