@@ -24,12 +24,12 @@ if (isset($_GET["request"]) && ($_GET["request"] == "reqbills")):
 
     if (($_GET["active"]) == 'true') {
 
-        $reqacbills = "http://congress.api.sunlightfoundation.com/bills?history.active=true&apikey=4acd972a599843bd93ea4dba171a483f&per_page=all";
+        $reqacbills = "https://congress.api.sunlightfoundation.com/bills?apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=50&history.active=true";
         $recvhtml = file_get_contents($reqacbills);
         echo $recvhtml;
 
     } else {
-        $reqnwbills = "http://congress.api.sunlightfoundation.com/bills?history.active=false&apikey=4acd972a599843bd93ea4dba171a483f&per_page=all";
+        $reqnwbills = "https://congress.api.sunlightfoundation.com/bills?apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=50&history.active=false";
         $recvhtml = file_get_contents($reqnwbills);
         echo $recvhtml;
     }
