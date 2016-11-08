@@ -13,6 +13,12 @@ if (isset($_GET["request"]) && ($_GET["request"] == "reqlegislator")):
         $recvhtml = file_get_contents($reqlegislatorbychamer);
         echo $recvhtml;
 
+    } else if (isset($_GET["bioid"])) {
+        $bioid = $_GET["bioid"];
+        $reqlegislatorbychamer = "http://congress.api.sunlightfoundation.com/legislators?bioguide_id=" . $bioid . "&apikey=4acd972a599843bd93ea4dba171a483f";
+        $recvhtml = file_get_contents($reqlegislatorbychamer);
+        echo $recvhtml;
+
     } else {
         $reqlegislator = "http://congress.api.sunlightfoundation.com/legislators?apikey=4acd972a599843bd93ea4dba171a483f&per_page=all";
         $recvhtml = file_get_contents($reqlegislator);

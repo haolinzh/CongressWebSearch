@@ -20,6 +20,19 @@
     <script>
         var hide = 0;
         $(document).ready(function () {
+
+            $("#myCarousel").carousel();
+            $("#billtab").hide();
+
+            $("#bill").click(function () {
+                $("#legtab").hide();
+                $("#billtab").show();
+            });
+            $("#leg").click(function () {
+                $("#billtab").hide();
+                $("#legtab").show();
+            });
+
             $('#tog').click(function () {
                 if (hide == 0) {
                     $('#mynav').hide();
@@ -72,6 +85,8 @@
                             var chamber = $scope.res.data.results[i].chamber;
                             var district = $scope.res.data.results[i].district;
                             var statename = $scope.res.data.results[i].state_name;
+                            var bioid = $scope.res.data.results[i].bioguide_id;
+
                             var chambertxt;
                             if (party == 'R') {
                                 party = 'r.png';
@@ -99,7 +114,8 @@
                                 chamber: chamber,
                                 district: district,
                                 statename: statename,
-                                chambertxt: chambertxt
+                                chambertxt: chambertxt,
+                                bioid:bioid
                             };
                             $scope.leg1.push(leg);
                         }
@@ -224,7 +240,7 @@
 
                             var billid = $scope.res.data.results[i].bill_id.toUpperCase();
                             var billtype = $scope.res.data.results[i].bill_type.toUpperCase();
-                            var billtitle= $scope.res.data.results[i].official_title;
+                            var billtitle = $scope.res.data.results[i].official_title;
                             var chamber = $scope.res.data.results[i].chamber;
                             var introducted = $scope.res.data.results[i].introduced_on;
                             var sponsor = $scope.res.data.results[i].sponsor.title + ' ' + $scope.res.data.results[i].sponsor.last_name + ", " + $scope.res.data.results[i].sponsor.first_name;
@@ -242,7 +258,7 @@
                             var bill = {
                                 billid: billid,
                                 billtype: billtype,
-                                billtitle:billtitle,
+                                billtitle: billtitle,
                                 chamber: chamber,
                                 introducted: introducted,
                                 sponsor: sponsor,
@@ -268,7 +284,7 @@
 
                             var billid = $scope.res.data.results[i].bill_id.toUpperCase();
                             var billtype = $scope.res.data.results[i].bill_type.toUpperCase();
-                            var billtitle= $scope.res.data.results[i].official_title;
+                            var billtitle = $scope.res.data.results[i].official_title;
                             var chamber = $scope.res.data.results[i].chamber;
                             var introducted = $scope.res.data.results[i].introduced_on;
                             var sponsor = $scope.res.data.results[i].sponsor.title + ' ' + $scope.res.data.results[i].sponsor.last_name + ", " + $scope.res.data.results[i].sponsor.first_name;
@@ -286,7 +302,7 @@
                             var bill = {
                                 billid: billid,
                                 billtype: billtype,
-                                billtitle:billtitle,
+                                billtitle: billtitle,
                                 chamber: chamber,
                                 introducted: introducted,
                                 sponsor: sponsor,
@@ -298,6 +314,36 @@
                     }, function errorCallback(response) {
                     }
             );
+
+
+            $scope.viewdet = function (id) {
+
+                $("#myCarousel").carousel(1);
+                $http({
+                    method: 'GET',
+                    url: requrl,
+                    params: {request: 'reqlegislator', bioid: id}
+
+                }).then(
+                        function successCallback(response) {
+                            $scope.res = angular.fromJson(response);
+                            var lastname= $scope.res.data.results[0].last_name;
+                            var firstname= $scope.res.data.results[0].last_name;
+                           
+
+
+
+
+                        }, function errorCallback(response) {
+                        }
+                );
+
+            };
+
+            $scope.back = function () {
+                $("#myCarousel").carousel(0);
+
+            };
 
 
         }
@@ -330,33 +376,34 @@
         <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2"
              style="height:1000px;padding-left: 0px;padding-right: 0px;">
             <ul class=" nav navbar-fixed-left" style="height:100%;background-color:rgb(69,69,69)">
-                <li><a id="leg" data-toggle="tab" href="#legtab" style="color: white;height: 50px;"><span
-                        class="glyphicon glyphicon-user"></span> <span
+                <li><a id="leg" ng-click="showleg" style="color: white;height: 50px;"><span class="glyphicon glyphicon-user"></span> <span
                         class="hidden-xs hidden-sm">Legislators</span></a></li>
-                <li><a id="bill" data-toggle="tab" href="#billtab" style="color: white;height: 50px;"><span
-                        class="glyphicon glyphicon-file"></span><span class="hidden-xs hidden-sm"> Bills</span></a></li>
+                <li><a id="bill" ng-click="showbill"style="color: white;height: 50px;"><span class="glyphicon glyphicon-file"></span><span
+                        class="hidden-xs hidden-sm"> Bills</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-log-in"></span>
                     <span class="hidden-xs hidden-sm"> Comittees</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-star"></span>
                     <span class="hidden-xs hidden-sm"> Favorites</span></a></li>
             </ul>
         </div>
-        <div class="tab-content" ng-controller="LGC">
-            <div id="legtab" class=" tab-pane fade in active  xblock col-lg-10 col-xs-11 col-sm-11  col-md-10"
-                 style="background-color: whitesmoke">
-                <h1>Legislators</h1>
-                <hr>
-
-                <div style="border: solid 1px lightgray;border-radius: 5px ">
-                    <ul class="nav nav-tabs" style="background-color: white">
-                        <li id="tab11" class="active"><a data-toggle="tab" href="#11">By state</a></li>
-                        <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
-                        <li id="tab13"><a data-toggle="tab" href="#13">Senate</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="11" class="tab-pane fade in active">
-                            <div class="well" style="margin: 0;">Legislators<br class="visible-xs"> By State
-                                <span> <select style="float: right" ng-model="q1" id="sel1">
+        <div ng-controller="LGC">
+            <div id="myCarousel" class="carousel slide" data-interval="false">
+                <div id="legtab" class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10"
+                     style="background-color: whitesmoke">
+                    <h1>Legislators</h1>
+                    <hr>
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <div style="border: solid 1px lightgray;border-radius: 5px ">
+                                <ul class="nav nav-tabs" style="background-color: white">
+                                    <li id="tab11" class="active"><a data-toggle="tab" href="#11">By state</a></li>
+                                    <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
+                                    <li id="tab13"><a data-toggle="tab" href="#13">Senate</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="11" class="tab-pane fade in active">
+                                        <div class="well" style="margin: 0;">Legislators<br class="visible-xs"> By State
+                                            <span> <select style="float: right" ng-model="q1" id="sel1">
                                         <option value>All States</option>
                                         <option value="Alabama">Alabama</option>
                                         <option value="Alaska">Alaska</option>
@@ -414,162 +461,183 @@
                                     </select>
                                 </span>
 
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
+                                        </div>
+                                        <div class="panel panel-default">
 
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="leg in leg1| orderBy:['statename','name']| filter:{statename:q1||undefined}:true | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="legtab1" style="min-width: 400px">
+                                            <div class="panel-body" style="overflow: scroll">
 
-                                            <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                            <td style="white-space: nowrap">{{ leg.name }}</td>
-                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}' width='20px'
-                                                                                 height='20'/> {{
-                                                leg.chambertxt
-                                                }}
-                                            </td>
-                                            <td style="white-space: nowrap">{{ leg.district}}</td>
-                                            <td>{{ leg.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
+                                                <table class=" table table-hover table-responsive">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Party</th>
+                                                        <th>Name</th>
+                                                        <th>Chamber</th>
+                                                        <th>District</th>
+                                                        <th>State</th>
+                                                        <th>Detail</th>
 
-                                    </table>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr dir-paginate="leg in leg1| orderBy:['statename','name']| filter:{statename:q1||undefined}:true | itemsPerPage: pageSize"
+                                                        current-page="currentPage" pagination-id="legtab1"
+                                                        style="min-width: 400px">
+
+                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
+                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                             width='20px'
+                                                                                             height='20'/> {{
+                                                            leg.chambertxt
+                                                            }}
+                                                        </td>
+                                                        <td style="white-space: nowrap">{{ leg.district}}</td>
+                                                        <td>{{ leg.statename}}</td>
+                                                        <td>
+                                                            <button class='btn btn-primary'
+                                                                    ng-click="viewdet(leg.bioid)">View Detail
+                                                            </button>
+                                                        </td>
+                                                    <tr>
+                                                    <tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div ng-controller="OtherController">
+                                            <div class="text-center">
+                                                <dir-pagination-controls boundary-links="true"
+                                                                         pagination-id="legtab1"
+                                                ></dir-pagination-controls>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div id="12" class="tab-pane fade">
+                                        <div class="well" style="margin: 0;"><span>Legislators<br
+                                                class="visible-xs"> By House</span>
+                                            <input type="text" ng-model="q2" id="search12" style="float: right"
+                                                   placeholder="Search">
+
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="overflow: scroll">
+
+                                                <table class=" table table-hover table-responsive">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Party</th>
+                                                        <th>Name</th>
+                                                        <th>Chamber</th>
+                                                        <th>District</th>
+                                                        <th>State</th>
+                                                        <th>Detail</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr dir-paginate="leg in leg2|orderBy:['statename','name']| filter:q2 | itemsPerPage: pageSize"
+                                                        current-page="currentPage" pagination-id="legtab2"
+                                                        style="min-width: 400px">
+
+                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
+                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                             width='20px'
+                                                                                             height='20'/> {{
+                                                            leg.chambertxt
+                                                            }}
+                                                        </td>
+                                                        <td style="white-space: nowrap">{{ leg.district}}</td>
+                                                        <td>{{ leg.statename}}</td>
+                                                        <td>
+                                                            <button class='btn btn-primary'>View Detail</button>
+                                                        </td>
+                                                    <tr>
+                                                    <tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div ng-controller="OtherController">
+                                            <div class="text-center">
+                                                <dir-pagination-controls boundary-links="true"
+                                                                         pagination-id="legtab2"></dir-pagination-controls>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div id="13" class="tab-pane fade">
+                                        <div class="well" style="margin: 0;"><span>Legislators<br
+                                                class="visible-xs"> By Senate</span>
+                                            <input type="text" ng-model="q3" id="search13" style="float: right"
+                                                   placeholder="Search">
+
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="overflow: scroll">
+
+                                                <table class=" table table-hover table-responsive">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Party</th>
+                                                        <th>Name</th>
+                                                        <th>Chamber</th>
+                                                        <th>State</th>
+                                                        <th>Detail</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr dir-paginate="leg in leg3| orderBy:['statename','name']| filter:q3 | itemsPerPage: pageSize"
+                                                        current-page="currentPage" pagination-id="legtab3"
+                                                        style="min-width: 400px">
+
+                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
+                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                             width='20px'
+                                                                                             height='20'/> {{
+                                                            leg.chambertxt
+                                                            }}
+                                                        </td>
+                                                        <td>{{ leg.statename}}</td>
+                                                        <td>
+                                                            <button class='btn btn-primary'>View Detail</button>
+                                                        </td>
+                                                    <tr>
+                                                    <tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div ng-controller="OtherController">
+                                            <div class="text-center">
+                                                <dir-pagination-controls boundary-links="true"
+                                                                         pagination-id="legtab3"></dir-pagination-controls>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
                                 </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="legtab1"
-                                    ></dir-pagination-controls>
-                                </div>
-                            </div>
 
-
+                            </div>
                         </div>
-                        <div id="12" class="tab-pane fade">
-                            <div class="well" style="margin: 0;"><span>Legislators<br
-                                    class="visible-xs"> By House</span>
-                                <input type="text" ng-model="q2" id="search12" style="float: right"
-                                       placeholder="Search">
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>District</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="leg in leg2|orderBy:['statename','name']| filter:q2 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="legtab2" style="min-width: 400px">
-
-                                            <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                            <td style="white-space: nowrap">{{ leg.name }}</td>
-                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}' width='20px'
-                                                                                 height='20'/> {{
-                                                leg.chambertxt
-                                                }}
-                                            </td>
-                                            <td style="white-space: nowrap">{{ leg.district}}</td>
-                                            <td>{{ leg.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="legtab2"></dir-pagination-controls>
-                                </div>
-                            </div>
-
-
+                        <div class="item">
+                            <button class="glyphicon glyphicon-chevron-left" ng-click="back()"></button>Details
+                            <hr>
+                            <P>KAIGESHUOCAONIMA</P>
+                            <table>
+                               <> <tr><tr>
+                            </table>
                         </div>
-                        <div id="13" class="tab-pane fade">
-                            <div class="well" style="margin: 0;"><span>Legislators<br
-                                    class="visible-xs"> By Senate</span>
-                                <input type="text" ng-model="q3" id="search13" style="float: right"
-                                       placeholder="Search">
 
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th>Party</th>
-                                            <th>Name</th>
-                                            <th>Chamber</th>
-                                            <th>State</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="leg in leg3| orderBy:['statename','name']| filter:q3 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="legtab3" style="min-width: 400px">
-
-                                            <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                            <td style="white-space: nowrap">{{ leg.name }}</td>
-                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}' width='20px'
-                                                                                 height='20'/> {{
-                                                leg.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ leg.statename}}</td>
-                                            <td>
-                                                <button class='btn btn-primary'>View Detail</button>
-                                            </td>
-                                        <tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div ng-controller="OtherController">
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="legtab3"></dir-pagination-controls>
-                                </div>
-                            </div>
-
-
-                        </div>
                     </div>
-
                 </div>
             </div>
 
-
-            <div id="billtab" class=" tab-pane fade  xblock col-lg-10 col-xs-11 col-sm-11  col-md-10"
+            <div id="billtab" class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10"
                  style="background-color: whitesmoke">
                 <h1>Bills</h1>
                 <hr>
@@ -639,7 +707,7 @@
                         </div>
                         <div id="22" class="tab-pane fade">
                             <div class="well" style="margin: 0;"><span>New Bills</span>
-                                <input type="text" ng-model="q5" id="search22"style="float: right"
+                                <input type="text" ng-model="q5" id="search22" style="float: right"
                                        placeholder="Search">
 
                             </div>
