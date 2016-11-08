@@ -34,10 +34,35 @@ if (isset($_GET["request"]) && ($_GET["request"] == "reqbills")):
         $recvhtml = file_get_contents($reqacbills);
         echo $recvhtml;
 
-    } else {
+    }
+    else if(($_GET["active"]) == 'false'){
         $reqnwbills = "https://congress.api.sunlightfoundation.com/bills?apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=50&history.active=false";
         $recvhtml = file_get_contents($reqnwbills);
         echo $recvhtml;
+    }
+
+    else if(($_GET["bioid"])){
+        $bioid = $_GET["bioid"];
+        $reqlbillforleg = "https://congress.api.sunlightfoundation.com/bills?sponsor_id=".$bioid."&apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=5";
+        $recvhtml = file_get_contents( $reqlbillforleg);
+        echo $recvhtml;
+    }
+
+endif;
+
+
+if (isset($_GET["request"]) && ($_GET["request"] == "reqcommittee")):
+
+    if (($_GET["bioid"])) {
+
+        $bioid=$_GET["bioid"];
+        $reqcomforleg = "https://congress.api.sunlightfoundation.com/committees?member_ids=".$bioid."&apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=5";
+        $recvhtml = file_get_contents($reqcomforleg);
+        echo $recvhtml;
+
+    } else {
+        echo "Wrong";
+
     }
 
 endif;

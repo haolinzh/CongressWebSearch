@@ -61,6 +61,7 @@
             $scope.bill1 = [];
             $scope.bill2 = [];
 
+
             var requrl = 'CongressServer.php';
             var para1 = {request: 'reqlegislator'};
             var para2 = {request: 'reqlegislator', chamber: 'house'};
@@ -78,14 +79,15 @@
                         $scope.res = angular.fromJson(response);
                         var len = $scope.res.data.results.length;
                         for (i = 0; i < len; i++) {
-                            var party = $scope.res.data.results[i].party;
-                            var lastname = $scope.res.data.results[i].last_name;
-                            var firstname = $scope.res.data.results[i].first_name;
+                            var obj= $scope.res.data.results[i];
+                            var party =obj.party;
+                            var lastname = obj.last_name;
+                            var firstname = obj.first_name;
                             var name = lastname + ", " + firstname;
-                            var chamber = $scope.res.data.results[i].chamber;
-                            var district = $scope.res.data.results[i].district;
-                            var statename = $scope.res.data.results[i].state_name;
-                            var bioid = $scope.res.data.results[i].bioguide_id;
+                            var chamber = obj.chamber;
+                            var district = obj.district;
+                            var statename = obj.state_name;
+                            var bioid = obj.bioguide_id;
 
                             var chambertxt;
                             if (party == 'R') {
@@ -133,14 +135,17 @@
                         $scope.res = angular.fromJson(response);
                         var len = $scope.res.data.results.length;
                         for (i = 0; i < len; i++) {
-                            var party = $scope.res.data.results[i].party;
-                            var lastname = $scope.res.data.results[i].last_name;
-                            var firstname = $scope.res.data.results[i].first_name;
+
+                            var obj=$scope.res.data.results[i];
+                            var party = obj.party;
+                            var lastname = obj.last_name;
+                            var firstname = obj.first_name;
                             var name = lastname + ", " + firstname;
-                            var chamber = $scope.res.data.results[i].chamber;
-                            var district = $scope.res.data.results[i].district;
-                            var statename = $scope.res.data.results[i].state_name;
+                            var chamber = obj.chamber;
+                            var district =obj.district;
+                            var statename = obj.state_name;
                             var chambertxt;
+                            var bioid = obj.bioguide_id;
                             if (party == 'R') {
                                 party = 'r.png';
                             }
@@ -167,7 +172,8 @@
                                 chamber: chamber,
                                 district: district,
                                 statename: statename,
-                                chambertxt: chambertxt
+                                chambertxt: chambertxt,
+                                bioid:bioid
                             };
                             $scope.leg2.push(leg);
                         }
@@ -185,14 +191,18 @@
                         $scope.res = angular.fromJson(response);
                         var len = $scope.res.data.results.length;
                         for (i = 0; i < len; i++) {
-                            var party = $scope.res.data.results[i].party;
-                            var lastname = $scope.res.data.results[i].last_name;
-                            var firstname = $scope.res.data.results[i].first_name;
+
+                            var obj=$scope.res.data.results[i];
+
+                            var party = obj.party;
+                            var lastname = obj.last_name;
+                            var firstname = obj.first_name;
                             var name = lastname + ", " + firstname;
-                            var chamber = $scope.res.data.results[i].chamber;
-                            var district = $scope.res.data.results[i].district;
-                            var statename = $scope.res.data.results[i].state_name;
+                            var chamber = obj.chamber;
+                            var district =obj.district;
+                            var statename =obj.state_name;
                             var chambertxt;
+                            var bioid = obj.bioguide_id;
                             if (party == 'R') {
                                 party = 'r.png';
                             }
@@ -219,7 +229,8 @@
                                 chamber: chamber,
                                 district: district,
                                 statename: statename,
-                                chambertxt: chambertxt
+                                chambertxt: chambertxt,
+                                bioid:bioid
                             };
                             $scope.leg3.push(leg);
                         }
@@ -237,13 +248,13 @@
                         $scope.res = angular.fromJson(response);
                         var len = $scope.res.data.results.length;
                         for (i = 0; i < len; i++) {
-
-                            var billid = $scope.res.data.results[i].bill_id.toUpperCase();
-                            var billtype = $scope.res.data.results[i].bill_type.toUpperCase();
-                            var billtitle = $scope.res.data.results[i].official_title;
-                            var chamber = $scope.res.data.results[i].chamber;
-                            var introducted = $scope.res.data.results[i].introduced_on;
-                            var sponsor = $scope.res.data.results[i].sponsor.title + ' ' + $scope.res.data.results[i].sponsor.last_name + ", " + $scope.res.data.results[i].sponsor.first_name;
+                            var obj=$scope.res.data.results[i];
+                            var billid = obj.bill_id.toUpperCase();
+                            var billtype =obj.bill_type.toUpperCase();
+                            var billtitle =obj.official_title;
+                            var chamber = obj.chamber;
+                            var introducted =obj.introduced_on;
+                            var sponsor = obj.sponsor.title + ' ' + obj.sponsor.last_name + ", " + obj.sponsor.first_name;
 
                             if (chamber == "house") {
                                 chamber = 'h.png';
@@ -282,12 +293,13 @@
                         var len = $scope.res.data.results.length;
                         for (i = 0; i < len; i++) {
 
-                            var billid = $scope.res.data.results[i].bill_id.toUpperCase();
-                            var billtype = $scope.res.data.results[i].bill_type.toUpperCase();
-                            var billtitle = $scope.res.data.results[i].official_title;
-                            var chamber = $scope.res.data.results[i].chamber;
-                            var introducted = $scope.res.data.results[i].introduced_on;
-                            var sponsor = $scope.res.data.results[i].sponsor.title + ' ' + $scope.res.data.results[i].sponsor.last_name + ", " + $scope.res.data.results[i].sponsor.first_name;
+                            var obj=$scope.res.data.results[i];
+                            var billid = obj.bill_id.toUpperCase();
+                            var billtype =obj.bill_type.toUpperCase();
+                            var billtitle = obj.official_title;
+                            var chamber = obj.chamber;
+                            var introducted = obj.introduced_on;
+                            var sponsor = obj.sponsor.title + ' ' + obj.sponsor.last_name + ", " + obj.sponsor.first_name;
 
                             if (chamber == "house") {
                                 chamber = 'h.png';
@@ -327,23 +339,26 @@
                 }).then(
                         function successCallback(response) {
                             $scope.res = angular.fromJson(response);
-                            var id = $scope.res.data.results[0].bioguide_id;
-                            var lastname = $scope.res.data.results[0].last_name;
-                            var firstname = $scope.res.data.results[0].first_name;
-                            var name = lastname + "," + firstname;
-                            var email = $scope.res.data.results[0].oc_email;
-                            var chamber = $scope.res.data.results[0].chamber;
-                            var phone = $scope.res.data.results[0].phone;
-                            var party = $scope.res.data.results[0].party;
-                            var tstart = $scope.res.data.results[0].term_start;
-                            var tend = $scope.res.data.results[0].term_end;
-                            var office = $scope.res.data.results[0].office;
-                            var state = $scope.res.data.results[0].state_name;
-                            var fax = $scope.res.data.results[0].fax;
-                            var birthday = $scope.res.data.results[0].birthday;
-                            var tid = $scope.res.data.results[0].twitter_id;
-                            var fid = $scope.res.data.results[0].facebook_id;
-                            var web = $scope.res.data.results[0].website;
+                            var obj=$scope.res.data.results[0];
+
+                            var id = obj.bioguide_id;
+                            var lastname =  obj.last_name;
+                            var firstname =obj.first_name;
+                            var title=obj.title;
+                            var name = title+". "+lastname + "," + firstname;
+                            var email = obj.oc_email;
+                            var chamber = obj.chamber;
+                            var phone =obj.phone;
+                            var party = obj.party;
+                            var tstart = obj.term_start;
+                            var tend = obj.term_end;
+                            var office = obj.office;
+                            var state = obj.state_name;
+                            var fax = obj.fax;
+                            var birthday = obj.birthday;
+                            var tid = obj.twitter_id;
+                            var fid = obj.facebook_id;
+                            var web = obj.website;
                             var photo = "https://theunitedstates.io/images/congress/original/" + id + ".jpg";
                             var partytxt;
 
@@ -355,6 +370,15 @@
                                 party = 'd.png';
                                 partytxt='Democrat';
                             }
+
+                            var d=new Date();
+                            var d1=Date.parse(tstart);
+                            var d2=Date.parse(tend);
+
+                            var di1=d.getTime()-d1;
+                            var di2=d2-d1;
+                            var per=di1/di2;
+
 
                             $scope.lgdet = {
                                 photo: photo,
@@ -374,6 +398,79 @@
                                 fid:fid,
                                 web:web
                             };
+
+
+                        }, function errorCallback(response) {
+                        }
+                );
+                $http({
+                    method: 'GET',
+                    url: requrl,
+                    params: {request: 'reqcommittee', bioid: id}
+
+                }).then(
+                        function successCallback(response) {
+                            $scope.res = angular.fromJson(response);
+                            $scope.comforlegs=[];
+
+
+                            for(i=0;i<5;i++){
+
+                                var obj=$scope.res.data.results[i];
+
+                                var chamber = obj.chamber;
+                                var cid = obj.committee_id;
+                                var name = obj.name;
+
+                                var comforleg={
+                                    chamber:chamber,
+                                    cid:cid,
+                                    name:name
+                                };
+                                $scope.comforlegs.push(comforleg);
+
+                            }
+
+
+
+                        }, function errorCallback(response) {
+                        }
+                );
+                $http({
+                    method: 'GET',
+                    url: requrl,
+                    params: {request: 'reqbills', bioid: id}
+
+                }).then(
+                        function successCallback(response) {
+                            $scope.res = angular.fromJson(response);
+                            $scope.billforlegs=[];
+
+                            for(i=0;i<5;i++){
+                                var obj=$scope.res.data.results[i];
+
+                                var chamber = obj.chamber;
+                                var bid = obj.bill_id;
+                                var title= obj.official_title;
+                                var type = obj.bill_type;
+                                var congress = obj.congress;
+                                var link=obj.last_version.urls.pdf;
+
+                                var billforleg={
+                                    chamber:chamber,
+                                    bid:bid,
+                                    title:title,
+                                    type:type,
+                                    congress:congress,
+                                    link:link
+                                };
+                                $scope.billforlegs.push(billforleg);
+
+
+                            }
+
+
+
 
 
                         }, function errorCallback(response) {
@@ -595,7 +692,7 @@
                                                         <td style="white-space: nowrap">{{ leg.district}}</td>
                                                         <td>{{ leg.statename}}</td>
                                                         <td>
-                                                            <button class='btn btn-primary'>View Detail</button>
+                                                            <button class='btn btn-primary' ng-click="viewdet(leg.bioid)">View Detail</button>
                                                         </td>
                                                     <tr>
                                                     <tbody>
@@ -648,7 +745,7 @@
                                                         </td>
                                                         <td>{{ leg.statename}}</td>
                                                         <td>
-                                                            <button class='btn btn-primary'>View Detail</button>
+                                                            <button class='btn btn-primary' ng-click="viewdet(leg.bioid)">View Detail</button>
                                                         </td>
                                                     <tr>
                                                     <tbody>
@@ -695,7 +792,7 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <table class=" table table-hover table-responsive ">
+                                    <table class=" table table-responsive ">
                                         <tbody>
                                         <tr>
                                             <td>Start Term</td>
@@ -707,7 +804,11 @@
                                         </tr>
                                         <tr>
                                             <td>Term</td>
-                                            <td></td>
+                                            <td>  <div class="progress">
+                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                                                    40% Complete (success)
+                                                </div>
+                                            </div></td>
                                         </tr>
                                         <tr>
                                             <td>Office</td>
@@ -737,46 +838,27 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div><h4>Committees</h4>
                                     <table class=" table table-responsive ">
+                                        <thead>
+                                        <tr><th>Chamber</th><th>Comittee ID</th><th>Name</th></tr>
+                                        </thead>
                                         <tbody>
-                                        <tr>
-                                            <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
-                                            <td>{{lgdet.name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{lgdet.email}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Chamber: {{lgdet.chamber}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Contact: {{lgdet.phone}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src='{{lgdet.party }}' width='20px' height='20'/> {{lgdet.partytxt}}</td>
+                                        <tr ng-repeat="x in comforlegs">
+                                            <td>{{x.chamber}}</td><td>{{x.cid}}</td><td>{{x.name}}</td>
+
                                         </tr>
                                         </tbody>
                                     </table>
                                     </div>
                                     <div><h4>Bills</h4>
                                         <table class=" table table-responsive ">
-                                            <tbody>
-                                            <tr>
-                                                <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
-                                                <td>{{lgdet.name}}</td>
+                                            <thead>
+                                            <tr><th>Bill ID</th><th>Title</th><th>Chamber</th><th>Bill Type</th><th>Congress</th><th>Link</th></tr>
+                                            </thead>
+                                            <tr ng-repeat="x in billforlegs">
+                                                <td>{{x.bid}}</td><td>{{x.title}}</td><td>{{x.chamber}}</td><td>{{x.type}}</td><td>{{x.congress}}</td>
+                                                <td><a href="{{x.link}}" target="_blank">link</a></td>
+
                                             </tr>
-                                            <tr>
-                                                <td>{{lgdet.email}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Chamber: {{lgdet.chamber}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Contact: {{lgdet.phone}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><img src='{{lgdet.party }}' width='20px' height='20'/> {{lgdet.partytxt}}</td>
-                                            </tr>
-                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
