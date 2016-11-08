@@ -9,11 +9,11 @@
     <script data-require="angular.js@1.3.0" data-semver="1.3.0"
             src="https://code.angularjs.org/1.3.0/angular.js"></script>
     <script src="dirPagination.js"></script>
-    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <style>
         body {
-            font-family: open_sans;
+            font-family: "Open Sans";
         }
     </style>
 
@@ -115,7 +115,7 @@
                                 district: district,
                                 statename: statename,
                                 chambertxt: chambertxt,
-                                bioid:bioid
+                                bioid: bioid
                             };
                             $scope.leg1.push(leg);
                         }
@@ -327,11 +327,53 @@
                 }).then(
                         function successCallback(response) {
                             $scope.res = angular.fromJson(response);
-                            var lastname= $scope.res.data.results[0].last_name;
-                            var firstname= $scope.res.data.results[0].last_name;
-                           
+                            var id = $scope.res.data.results[0].bioguide_id;
+                            var lastname = $scope.res.data.results[0].last_name;
+                            var firstname = $scope.res.data.results[0].first_name;
+                            var name = lastname + "," + firstname;
+                            var email = $scope.res.data.results[0].oc_email;
+                            var chamber = $scope.res.data.results[0].chamber;
+                            var phone = $scope.res.data.results[0].phone;
+                            var party = $scope.res.data.results[0].party;
+                            var tstart = $scope.res.data.results[0].term_start;
+                            var tend = $scope.res.data.results[0].term_end;
+                            var office = $scope.res.data.results[0].office;
+                            var state = $scope.res.data.results[0].state_name;
+                            var fax = $scope.res.data.results[0].fax;
+                            var birthday = $scope.res.data.results[0].birthday;
+                            var tid = $scope.res.data.results[0].twitter_id;
+                            var fid = $scope.res.data.results[0].facebook_id;
+                            var web = $scope.res.data.results[0].website;
+                            var photo = "https://theunitedstates.io/images/congress/original/" + id + ".jpg";
+                            var partytxt;
 
+                            if (party == 'R') {
+                                party = 'r.png';
+                                partytxt='Republic';
+                            }
+                            else if (party == 'D') {
+                                party = 'd.png';
+                                partytxt='Democrat';
+                            }
 
+                            $scope.lgdet = {
+                                photo: photo,
+                                partytxt:partytxt,
+                                name: name,
+                                email: email,
+                                chamber: chamber,
+                                phone: phone,
+                                party: party,
+                                tstart: tstart,
+                                tend: tend,
+                                office: office,
+                                state: state,
+                                fax: fax,
+                                birthday: birthday,
+                                tid:tid,
+                                fid:fid,
+                                web:web
+                            };
 
 
                         }, function errorCallback(response) {
@@ -376,9 +418,11 @@
         <div id="mynav" class="col-xs-1  col-sm-1 col-md-2 col-lg-2"
              style="height:1000px;padding-left: 0px;padding-right: 0px;">
             <ul class=" nav navbar-fixed-left" style="height:100%;background-color:rgb(69,69,69)">
-                <li><a id="leg" ng-click="showleg" style="color: white;height: 50px;"><span class="glyphicon glyphicon-user"></span> <span
+                <li><a id="leg" style="color: white;height: 50px;"><span
+                        class="glyphicon glyphicon-user"></span> <span
                         class="hidden-xs hidden-sm">Legislators</span></a></li>
-                <li><a id="bill" ng-click="showbill"style="color: white;height: 50px;"><span class="glyphicon glyphicon-file"></span><span
+                <li><a id="bill" style="color: white;height: 50px;"><span
+                        class="glyphicon glyphicon-file"></span><span
                         class="hidden-xs hidden-sm"> Bills</span></a></li>
                 <li><a href="#" style="color: white;height: 50px;"><span class="glyphicon glyphicon-log-in"></span>
                     <span class="hidden-xs hidden-sm"> Comittees</span></a></li>
@@ -498,7 +542,7 @@
                                                                     ng-click="viewdet(leg.bioid)">View Detail
                                                             </button>
                                                         </td>
-                                                    <tr>
+                                                    </tr>
                                                     <tbody>
 
                                                 </table>
@@ -555,6 +599,7 @@
                                                         </td>
                                                     <tr>
                                                     <tbody>
+
 
                                                 </table>
                                             </div>
@@ -624,13 +669,118 @@
 
                             </div>
                         </div>
-                        <div class="item">
-                            <button class="glyphicon glyphicon-chevron-left" ng-click="back()"></button>Details
+                        <div class="item" style="background-color: white">
+                            <button class="glyphicon glyphicon-chevron-left" ng-click="back()" style="background-color: white;height: 30px" ></button>
+                            Details
                             <hr>
-                            <P>KAIGESHUOCAONIMA</P>
-                            <table>
-                               <> <tr><tr>
-                            </table>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <table class=" table table-responsive ">
+                                        <tbody>
+                                        <tr>
+                                            <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
+                                            <td>{{lgdet.name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{lgdet.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chamber: {{lgdet.chamber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact: {{lgdet.phone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src='{{lgdet.party }}' width='20px' height='20'/> {{lgdet.partytxt}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class=" table table-hover table-responsive ">
+                                        <tbody>
+                                        <tr>
+                                            <td>Start Term</td>
+                                            <td>{{lgdet.tstart}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>End Term</td>
+                                            <td>{{lgdet.tend}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Term</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Office</td>
+                                            <td>{{lgdet.office}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>State</td>
+                                            <td>{{lgdet.state}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fax</td>
+                                            <td>{{lgdet.fax}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Birthday</td>
+                                            <td>{{lgdet.birthday}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Social Links</td>
+                                            <td><a href="https://www.twitter.com/{{lgdet.tid}}" target="_blank"><img src="t.png" width="30px"></a>&nbsp;
+                                                <a href="https://www.facebook.com/{{lgdet.fid}}" target="_blank"><img src="f.png"  width="30px"></a>&nbsp;
+                                                <a href="{{lgdet.web}}" target="_blank"><img src="w.png"  width="30px"></a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div><h4>Committees</h4>
+                                    <table class=" table table-responsive ">
+                                        <tbody>
+                                        <tr>
+                                            <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
+                                            <td>{{lgdet.name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{lgdet.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chamber: {{lgdet.chamber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact: {{lgdet.phone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src='{{lgdet.party }}' width='20px' height='20'/> {{lgdet.partytxt}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                    <div><h4>Bills</h4>
+                                        <table class=" table table-responsive ">
+                                            <tbody>
+                                            <tr>
+                                                <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
+                                                <td>{{lgdet.name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{lgdet.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Chamber: {{lgdet.chamber}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact: {{lgdet.phone}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src='{{lgdet.party }}' width='20px' height='20'/> {{lgdet.partytxt}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
