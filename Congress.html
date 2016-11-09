@@ -85,7 +85,7 @@
             $scope.com3=[];
 
 
-            var requrl = 'CongressServer.php';
+            var requrl = 'http://congressinfo-env.us-west-2.elasticbeanstalk.com/index.php';
             var para1 = {request: 'reqlegislator'};
             var para2 = {request: 'reqlegislator', chamber: 'house'};
             var para3 = {request: 'reqlegislator', chamber: 'senate'};
@@ -122,6 +122,10 @@
                             else if (party == 'D') {
                                 party = 'd.png';
                             }
+                            else {
+                                party='i.png';
+                            }
+
                             if (chamber == "house") {
                                 chamber = 'h.png';
                                 chambertxt = 'House'
@@ -1101,8 +1105,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div><h4>Bills</h4>
-                                        <table class=" table table-responsive ">
+                                    <div ><h4>Bills</h4>
+                                        <table class=" table table-responsive hidden-xs">
                                             <thead>
                                             <tr>
                                                 <th>Bill ID</th>
@@ -1113,6 +1117,7 @@
                                                 <th>Link</th>
                                             </tr>
                                             </thead>
+
                                             <tr ng-repeat="x in billforlegs">
                                                 <td>{{x.bid}}</td>
                                                 <td>{{x.title}}</td>
@@ -1123,7 +1128,21 @@
 
                                             </tr>
                                         </table>
+                                        <table class=" table table-responsive visible-xs">
+                                            <thead>
+                                            <th>Bill ID</th>
+                                            <th>Link</th>
+                                            </thead>
+
+                                            <tr ng-repeat="x in billforlegs">
+                                                <td>{{x.bid}}</td>
+                                                <td><a href="{{x.link}}" target="_blank">Link</a></td>
+                                            </tr>
+
+                                        </table>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
