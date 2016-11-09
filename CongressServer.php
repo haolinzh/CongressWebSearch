@@ -69,9 +69,11 @@ if (isset($_GET["request"]) && ($_GET["request"] == "reqcommittee")):
         $recvhtml = file_get_contents($reqcomforleg);
         echo $recvhtml;
 
-    } else {
-        echo "Wrong";
-
+    } else if(isset($_GET["chamber"])){
+        $chamber=$_GET["chamber"];
+        $reqhcom="https://congress.api.sunlightfoundation.com/committees?chamber=".$chamber."&apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a&per_page=all";
+        $recvhtml = file_get_contents($reqhcom);
+        echo $recvhtml;
     }
 
 endif;
