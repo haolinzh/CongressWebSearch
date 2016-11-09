@@ -47,6 +47,15 @@ if (isset($_GET["request"]) && ($_GET["request"] == "reqbills")):
         $recvhtml = file_get_contents( $reqlbillforleg);
         echo $recvhtml;
     }
+    else if(($_GET["billid"])){
+        $bill = $_GET["billid"];
+        $reqlspecbill = "https://congress.api.sunlightfoundation.com/bills?bill_id=".$bill."&apikey=3e10ee5ae4ca4e5f884cbedf3ef2372a";
+        $recvhtml = file_get_contents( $reqlspecbill);
+        echo $recvhtml;
+    }
+    else{
+        echo "Wrong";
+    }
 
 endif;
 
