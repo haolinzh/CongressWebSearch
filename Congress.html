@@ -10,6 +10,7 @@
             src="https://code.angularjs.org/1.3.0/angular.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <script src="dirPagination.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <style>
@@ -34,22 +35,34 @@
 
             $("#billtab").hide();
             $("#comtab").hide();
+            $("#favtab").hide();
 
             $("#bill").click(function () {
                 $("#comtab").hide();
                 $("#legtab").hide();
+                $("#favtab").hide();
                 $("#billtab").show();
             });
             $("#leg").click(function () {
                 $("#comtab").hide();
                 $("#billtab").hide();
+                $("#favtab").hide();
                 $("#legtab").show();
             });
 
             $("#com").click(function () {
                 $("#billtab").hide();
                 $("#legtab").hide();
+                $("#favtab").hide();
                 $("#comtab").show();
+
+            });
+
+            $("#fav").click(function () {
+                $("#billtab").hide();
+                $("#legtab").hide();
+                $("#comtab").hide();
+                $("#favtab").show();
 
             });
 
@@ -70,9 +83,9 @@
                 }
             });
         });
-        var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination']);
+        var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination','ngStorage']);
 
-        function LGC($scope, $http) {
+        function LGC($scope, $http,$localStorage) {
             $scope.pageSize = 10;
             $scope.currentPage = 1;
             $scope.leg1 = [];
@@ -718,6 +731,12 @@
                 $("#myCarousel2").carousel(0);
 
             };
+//Favorites
+            $scope.save=function (data,event,type) {
+                alert("Save");
+                $localStorage.store1=type;
+                alert($localStorage.store1);
+            }
 
 
         }
@@ -757,7 +776,7 @@
                         class="hidden-xs hidden-sm"> Bills</span></a></li>
                 <li><a id="com" style="color: white;height: 50px;"><i class="fa fa-sign-out" aria-hidden="true"></i>
                     <span class="hidden-xs hidden-sm"> Comittees</span></a></li>
-                <li><a href="#" style="color: white;height: 50px;"><i class="fa fa-star" aria-hidden="true"></i>
+                <li><a id="fav" style="color: white;height: 50px;"><i class="fa fa-star" aria-hidden="true"></i>
                     <span class="hidden-xs hidden-sm"> Favorites</span></a></li>
             </ul>
         </div>
@@ -1454,7 +1473,7 @@
                                             current-page="currentPage" pagination-id="comtab1"
                                             style="min-width: 400px">
 
-                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
+                                            <td><button class="glyphicon glyphicon-star-empty" ng-click="save(x,$event,'leg')"></button> </td>
                                             <td ><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
@@ -1580,6 +1599,174 @@
 
                 </div>
             </div>
+            <div id="favtab" class="xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1" style="background-color: whitesmoke">
+                <h1>Favorites</h1>
+                <hr>
+                <div style="border: solid 1px lightgray;border-radius: 5px ">
+                    <ul class="nav nav-tabs" style="background-color: white">
+                        <li id="tab41" class="active"><a data-toggle="tab" href="#41">Legislators</a></li>
+                        <li id="tab42"><a data-toggle="tab" href="#42">Bills</a></li>
+                        <li id="tab43"><a data-toggle="tab" href="#43">Committees</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="41" class="tab-pane fade in active">
+                            <div class="well" style="margin: 0;">Favorites Legislators
+
+                            </div>
+                            <div class="panel panel-default">
+
+                                <div class="panel-body" style="overflow: scroll">
+
+                                    <table class=" table table-hover table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Image</th>
+                                            <th>Party</th>
+                                            <th>Name</th>
+                                            <th>Chamber</th>
+                                            <th>State</th>
+                                            <th>Email</th>
+                                            <th><button class='btn btn-primary'>View Detail
+                                            </button>
+                                            </th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr dir-paginate="x in com1| orderBy:'comid'| filter: q6 | itemsPerPage: pageSize"
+                                            current-page="currentPage" pagination-id="comtab1"
+                                            style="min-width: 400px">
+
+                                            <td><button class="glyphicon glyphicon-star-empty" ng-click="save(x,$event,'leg')"></button> </td>
+                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                                x.chambertxt
+                                                }}
+                                            </td>
+                                            <td >{{ x.comid}}</td>
+                                            <td >{{ x.name}}</td>
+                                            <td>{{x.pcomid}}</td>
+                                            <td>{{x.phone}}</td>
+                                            <td>{{x.office}}</td>
+                                        </tr>
+                                        <tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <div ng-controller="OtherController">
+                                <div class="text-center">
+                                    <dir-pagination-controls boundary-links="true"
+                                                             pagination-id="comtab1"
+                                    ></dir-pagination-controls>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div id="42" class="tab-pane fade">
+                            <div class="well" style="margin: 0;">Favorites Bills
+
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body" style="overflow: scroll">
+                                    <table class=" table table-hover table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Bill ID</th>
+                                            <th>Bill Type</th>
+                                            <th>Title</th>
+                                            <th>Chamber</th>
+                                            <th>Introducted ON</th>
+                                            <th>Sponsor</th>
+                                            <th><button class='btn btn-primary'>View Detail
+                                            </button>
+                                            <th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr dir-paginate="x in com2| orderBy:'comid'| filter: q7 | itemsPerPage: pageSize"
+                                            current-page="currentPage" pagination-id="comtab2"
+                                            style="min-width: 400px">
+
+                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
+                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                                x.chambertxt
+                                                }}
+                                            </td>
+                                            <td >{{ x.comid}}</td>
+                                            <td >{{ x.name}}</td>
+                                            <td>{{x.pcomid}}</td>
+                                        </tr>
+                                        <tbody>
+
+                                    </table>
+
+
+                                </div>
+                            </div>
+                            <div ng-controller="OtherController">
+                                <div class="text-center">
+                                    <dir-pagination-controls boundary-links="true"
+                                                             pagination-id="comtab2"></dir-pagination-controls>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div id="43" class="tab-pane fade">
+                            <div class="well" style="margin: 0;">Favorites Committees
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body" style="overflow: scroll">
+
+                                    <table class=" table table-hover table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Chamber</th>
+                                            <th>Committee ID</th>
+                                            <th>Name</th>
+                                            <th>Parent Committee</th>
+                                            <th>Sub Committee</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr dir-paginate="x in com3| orderBy:'comid'| filter: q8 | itemsPerPage: pageSize"
+                                            current-page="currentPage" pagination-id="comtab3"
+                                            style="min-width: 400px">
+
+                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
+                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                                x.chambertxt
+                                                }}
+                                            </td>
+                                            <td >{{ x.comid}}</td>
+                                            <td >{{ x.name}}</td>
+
+                                        </tr>
+                                        <tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <div ng-controller="OtherController">
+                                <div class="text-center">
+                                    <dir-pagination-controls boundary-links="true"
+                                                             pagination-id="comtab3"></dir-pagination-controls>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
