@@ -576,6 +576,7 @@
                             var photo = "https://theunitedstates.io/images/congress/original/" + id + ".jpg";
                             var partytxt;
                             var chamberp;
+                            var statac;
 
                             if (party == 'R') {
                                 party = 'r.png';
@@ -611,6 +612,14 @@
                             tend = formatDate(tend);
                             birthday = formatDate(birthday);
 
+                            if($scope.lfav[JSON.stringify(id)]){
+                                starac=true;
+
+                            }
+                            else{
+                                statac=false;
+                            }
+
 
                             $scope.lgdet = {
                                 id:id,
@@ -632,8 +641,11 @@
                                 fid: fid,
                                 web: web,
                                 per: per,
-                                percen: percen
+                                percen: percen,
+                                starac:statac
                             };
+
+
 
 
                         }, function errorCallback(response) {
@@ -748,6 +760,7 @@
                             var Introducted = obj.introduced_on;
                             var congressurl = obj.urls.congress;
                             var chamberp;
+                            var bstarac;
 
                             var versionname = obj.last_version.version_name;
                             var billurl = obj.last_version.urls.pdf;
@@ -761,6 +774,14 @@
                                 chamberp='s.svg';
                             }
 
+                            if($scope.bfav[JSON.stringify(id)]){
+                                bstarac=true;
+
+                            }
+                            else{
+                                bstarac=false;
+                            }
+
                             $scope.billdet = {
                                 id: id,
                                 title: title,
@@ -772,7 +793,8 @@
                                 Introducted: Introducted,
                                 congressurl: congressurl,
                                 versionname: versionname,
-                                billurl: billurl
+                                billurl: billurl,
+                                bstarsc:bstarac
 
                             };
 
@@ -813,15 +835,34 @@
             };
 
             $scope.saveb = function (b) {
+                if(!b.bstarac) {
+                    b.bstarac=true;
+                    $scope.bfav[JSON.stringify(b.id)] = b;
+                    localStorage.setItem('bill', JSON.stringify($scope.bfav));
+                }
+                else {
+                    b.bstarac=false;
+                    delete $scope.bfav[JSON.stringify(b.id)];
+                    localStorage.setItem('bill',JSON.stringify($scope.bfav));
 
-                $scope.bfav[JSON.stringify(b.id)] = b;
-                localStorage.setItem('bill', JSON.stringify($scope.bfav));
+                }
             };
 
             $scope.savel = function (l) {
+                if(!l.starac)
+                {
+                    l.starac=true;
+                    $scope.lfav[JSON.stringify(l.id)] = l;
+                    localStorage.setItem('leg', JSON.stringify($scope.lfav));
 
-                $scope.lfav[JSON.stringify(l.id)] = l;
-                localStorage.setItem('leg', JSON.stringify($scope.lfav));
+                }
+                else {
+                    l.starac=false;
+                    delete $scope.lfav[JSON.stringify(l.id)];
+                    localStorage.setItem('leg',JSON.stringify($scope.lfav));
+                }
+
+
             };
 
             $scope.deletec=function (cid) {
@@ -830,14 +871,18 @@
 
             };
 
-            $scope.deleteb=function (bid) {
-                delete $scope.bfav[JSON.stringify(bid)];
+            $scope.deleteb=function (b) {
+
+                b.bstarac=false;
+                delete $scope.bfav[JSON.stringify(b.id)];
                 localStorage.setItem('bill',JSON.stringify($scope.bfav));
 
             };
 
-            $scope.deletel=function (lid) {
-                delete $scope.lfav[JSON.stringify(lid)];
+            $scope.deletel=function (l) {
+
+                l.starac=false;
+                delete $scope.lfav[JSON.stringify(l.id)];
                 localStorage.setItem('leg',JSON.stringify($scope.lfav));
 
             };
@@ -1131,8 +1176,11 @@
                             <div>
                                 <button class="glyphicon glyphicon-chevron-left btn btn-default" ng-click="back()"
                                         style="height: 40px"></button>
-                                <h2 style="display: inline">Details</h2><button class="glyphicon glyphicon-star-empty  btn btn-default"
-                                                                                ng-click="savel(lgdet)" style="float: right"></button>
+                                <h2 style="display: inline">Details</h2>
+                                <button class="glyphicon glyphicon-star-empty  btn btn-default"
+                                                                                ng-click="savel(lgdet)" style="float: right">
+                                <span ng-if="lgdet.starac" class="glyphicon glyphicon-star" style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                            </button>
                             </div>
                             <hr>
                             <div class="row" style="padding: 20px">
@@ -1447,7 +1495,9 @@
                                 <button class="glyphicon glyphicon-chevron-left btn btn-default" ng-click="back2()"
                                         style="background-color: white;height: 40px;border: none"></button>
                                 <h2 style="display: inline">Details</h2><button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                                                ng-click="saveb(billdet)" style="float: right"></button>
+                                                                                ng-click="saveb(billdet)" style="float: right">
+                                <span ng-if="billdet.bstarac" class="glyphicon glyphicon-star" style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                            </button>
                             </div>
                             <hr>
 
@@ -1592,7 +1642,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1647,7 +1697,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1699,7 +1749,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1776,7 +1826,7 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="x in lfav">
-                                            <td><button class="btn btn-default" ng-click="deletel(x.id)"><i class="fa fa-trash" aria-hidden="true"></i> </button> </td>
+                                            <td><button class="btn btn-default" ng-click="deletel(x)"><i class="fa fa-trash" aria-hidden="true"></i> </button> </td>
                                             <td><img src="{{x.photo}}" width="20px"/></td>
                                             <td><img src="{{x.party}}" width="20px"/></td>
                                             <td>{{x.name}}</td>
@@ -1784,7 +1834,7 @@
                                             </td>
 
                                             <td>{{x.state}}</td>
-                                            <td>{{x.email}}</td>
+                                            <td><a href="mailto:{{lgdet.email}}">{{lgdet.email}}</a></td>
                                             <td><button class='btn btn-primary'
                                                    ng-click="favviewdetl(x.id)" >View Detail
                                             </button>
@@ -1826,7 +1876,7 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="x in bfav">
-                                            <td><button class="btn btn-default" ng-click="deleteb(x.id)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                            <td><button class="btn btn-default" ng-click="deleteb(x)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
                                             <td>{{x.id}}</td>
                                             <td>{{x.billtype}}</td>
                                             <td>{{x.title}}</td>
