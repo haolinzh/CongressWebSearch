@@ -21,7 +21,8 @@
         .xblock {
             border: solid 1px lightgray;
         }
-        .well{
+
+        .well {
             padding: 10px;
         }
     </style>
@@ -83,9 +84,27 @@
                 }
             });
         });
-        var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination','ngStorage']);
 
-        function LGC($scope, $http,$localStorage) {
+
+        function formatDate(date) {
+            var d = new Date(date);
+
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "June", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            var day = d.getDate() + 1;
+            var month = d.getMonth();
+            var year = d.getFullYear();
+            return monthNames[month] + " " + day + ", " + year;
+        }
+
+
+        var AJApp = angular.module('AJApp', ['angularUtils.directives.dirPagination', 'ngStorage']);
+
+        function LGC($scope, $http) {
             $scope.pageSize = 10;
             $scope.currentPage = 1;
             $scope.leg1 = [];
@@ -93,20 +112,20 @@
             $scope.leg3 = [];
             $scope.bill1 = [];
             $scope.bill2 = [];
-            $scope.com1=[];
-            $scope.com2=[];
-            $scope.com3=[];
+            $scope.com1 = [];
+            $scope.com2 = [];
+            $scope.com3 = [];
 
 
-            var requrl = 'http://congressinfo-env.us-west-2.elasticbeanstalk.com/index.php';
+            var requrl = 'CongressServer.php';
             var para1 = {request: 'reqlegislator'};
             var para2 = {request: 'reqlegislator', chamber: 'house'};
             var para3 = {request: 'reqlegislator', chamber: 'senate'};
             var para4 = {request: 'reqbills', active: 'true'};
             var para5 = {request: 'reqbills', active: 'false'};
-            var para6={request: 'reqcommittee', chamber: 'house'};
-            var para7={request: 'reqcommittee', chamber: 'senate'};
-            var para8={request: 'reqcommittee', chamber: 'joint'};
+            var para6 = {request: 'reqcommittee', chamber: 'house'};
+            var para7 = {request: 'reqcommittee', chamber: 'senate'};
+            var para8 = {request: 'reqcommittee', chamber: 'joint'};
 // Request all legislators
             $http({
                 method: 'GET',
@@ -136,7 +155,7 @@
                                 party = 'd.png';
                             }
                             else {
-                                party='i.png';
+                                party = 'i.png';
                             }
 
                             if (chamber == "house") {
@@ -387,11 +406,12 @@
 
                             var obj = $scope.res.data.results[i];
                             var chamber = obj.chamber;
-                            var comid=obj.committee_id;
+                            var comid = obj.committee_id;
                             var name = obj.name;
                             var pcomid = obj.parent_committee_id;
                             var phone = obj.phone;
-                            var office=obj.office;
+                            var office = obj.office;
+                            var subc=obj.subcommittee;
 
                             if (chamber == "house") {
                                 chamber = 'h.png';
@@ -403,19 +423,19 @@
                                 chambertxt = 'Senate';
                             }
 
-                            if(office==null)
-                            {
-                                office="N.A.";
+                            if (office == null) {
+                                office = "N.A.";
 
                             }
                             var comh = {
                                 chamber: chamber,
-                                chambertxt:chambertxt,
+                                chambertxt: chambertxt,
                                 comid: comid,
                                 name: name,
                                 pcomid: pcomid,
-                                phone:phone,
-                                office:office
+                                phone: phone,
+                                office: office,
+                                subc:subc
                             };
 
                             $scope.com1.push(comh);
@@ -437,9 +457,10 @@
 
                             var obj = $scope.res.data.results[i];
                             var chamber = obj.chamber;
-                            var comid=obj.committee_id;
+                            var comid = obj.committee_id;
                             var name = obj.name;
                             var pcomid = obj.parent_committee_id;
+                            var subc=obj.subcommittee;
 
 
                             if (chamber == "house") {
@@ -454,10 +475,11 @@
 
                             var comh = {
                                 chamber: chamber,
-                                chambertxt:chambertxt,
+                                chambertxt: chambertxt,
                                 comid: comid,
                                 name: name,
-                                pcomid: pcomid
+                                pcomid: pcomid,
+                                subc:subc
                             };
 
                             $scope.com2.push(comh);
@@ -465,7 +487,7 @@
                     }, function errorCallback(response) {
                     }
             );
- //Request joint com
+//Request joint com
             $http({
                 method: 'GET',
                 url: requrl,
@@ -479,11 +501,11 @@
 
                             var obj = $scope.res.data.results[i];
                             var chamber = obj.chamber;
-                            var comid=obj.committee_id;
+                            var comid = obj.committee_id;
                             var name = obj.name;
-                            var pcomid = obj.parent_committee_id;
-                            var phone = obj.phone;
-                            var office=obj.office;
+                            var office = obj.office;
+                            var subc=obj.subcommittee;
+
 
                             if (chamber == "house") {
                                 chamber = 'h.png';
@@ -494,22 +516,22 @@
                                 chamber = 's.svg';
                                 chambertxt = 'Senate';
                             }
-                            else{
+                            else {
                                 chamber = 's.svg';
                                 chambertxt = 'Joint';
 
                             }
 
-                            if(office==null)
-                            {
-                                office="N.A.";
+                            if (office == null) {
+                                office = "N.A.";
 
                             }
                             var comh = {
                                 chamber: chamber,
-                                chambertxt:chambertxt,
+                                chambertxt: chambertxt,
                                 comid: comid,
-                                name: name
+                                name: name,
+                                subc:subc
                             };
 
                             $scope.com3.push(comh);
@@ -553,6 +575,7 @@
                             var web = obj.website;
                             var photo = "https://theunitedstates.io/images/congress/original/" + id + ".jpg";
                             var partytxt;
+                            var chamberp;
 
                             if (party == 'R') {
                                 party = 'r.png';
@@ -561,6 +584,17 @@
                             else if (party == 'D') {
                                 party = 'd.png';
                                 partytxt = 'Democrat';
+                            }
+
+                            if (chamber == 'house') {
+                                chamber = 'House';
+                                chamberp='h.png';
+
+                            }
+                            else if (chamber == 'senate') {
+                                chamber = 'Senate';
+                                chamberp='s.svg';
+
                             }
 
                             var d = new Date();
@@ -573,12 +607,19 @@
                             per = Number(per.toFixed(0));
                             var percen = per + "%";
 
+                            tstart = formatDate(tstart);
+                            tend = formatDate(tend);
+                            birthday = formatDate(birthday);
+
+
                             $scope.lgdet = {
+                                id:id,
                                 photo: photo,
                                 partytxt: partytxt,
                                 name: name,
                                 email: email,
                                 chamber: chamber,
+                                chamberp:chamberp,
                                 phone: phone,
                                 party: party,
                                 tstart: tstart,
@@ -670,6 +711,14 @@
                 );
 
             };
+//View legislator detail from fav
+            $scope.favviewdetl=function (id) {
+                $('#favtab').hide();
+                $('#legtab').show();
+                $scope.viewdet(id);
+
+            };
+
 //View bill detail
             $scope.billdetails = function (id) {
 
@@ -688,18 +737,29 @@
                             if (len == 2) {
                                 var obj = $scope.res.data.results[1];
                             } else {
-                                 var obj = $scope.res.data.results[0];
+                                var obj = $scope.res.data.results[0];
                             }
                             var id = obj.bill_id.toUpperCase();
-                            var sponsor = obj.sponsor.title + ". " + obj.sponsor.last_name + ", " + obj.sponsor.last_name;
+                            var sponsor = obj.sponsor.title + ". " + obj.sponsor.last_name + ", " + obj.sponsor.first_name;
                             var chamber = obj.chamber;
                             var title = obj.official_title;
                             var billtype = obj.bill_type.toUpperCase();
                             var status = obj.history.active;
                             var Introducted = obj.introduced_on;
                             var congressurl = obj.urls.congress;
+                            var chamberp;
+
                             var versionname = obj.last_version.version_name;
                             var billurl = obj.last_version.urls.pdf;
+
+                            if(chamber=='house'){
+                                chamber='House';
+                                chamberp='h.png';
+                            }
+                            else if(chamber=='senate'){
+                                chamber='Senate';
+                                chamberp='s.svg';
+                            }
 
                             $scope.billdet = {
                                 id: id,
@@ -707,6 +767,7 @@
                                 billtype: billtype,
                                 sponsor: sponsor,
                                 chamber: chamber,
+                                chamberp:chamberp,
                                 status: status,
                                 Introducted: Introducted,
                                 congressurl: congressurl,
@@ -722,6 +783,15 @@
 
 
             };
+
+ //View bill detail from fav
+            $scope.favviewdetb=function (id) {
+                $('#favtab').hide();
+                $('#billtab').show();
+                $scope.billdetails(id);
+
+            };
+
 //Detail back button
             $scope.back = function () {
                 $("#myCarousel").carousel(0);
@@ -732,12 +802,45 @@
 
             };
 //Favorites
-            $scope.save=function (data,event,type) {
-                alert("Save");
-                $localStorage.store1=type;
-                alert($localStorage.store1);
-            }
+            $scope.cfav = JSON.parse(localStorage.getItem('com')) || {};
+            $scope.bfav = JSON.parse(localStorage.getItem('bill')) || {};
+            $scope.lfav = JSON.parse(localStorage.getItem('leg')) || {};
 
+            $scope.savec = function (c) {
+
+                $scope.cfav[JSON.stringify(c.comid)] = c;
+                localStorage.setItem('com', JSON.stringify($scope.cfav));
+            };
+
+            $scope.saveb = function (b) {
+
+                $scope.bfav[JSON.stringify(b.id)] = b;
+                localStorage.setItem('bill', JSON.stringify($scope.bfav));
+            };
+
+            $scope.savel = function (l) {
+
+                $scope.lfav[JSON.stringify(l.id)] = l;
+                localStorage.setItem('leg', JSON.stringify($scope.lfav));
+            };
+
+            $scope.deletec=function (cid) {
+                delete $scope.cfav[JSON.stringify(cid)];
+                localStorage.setItem('com',JSON.stringify($scope.cfav));
+
+            };
+
+            $scope.deleteb=function (bid) {
+                delete $scope.bfav[JSON.stringify(bid)];
+                localStorage.setItem('bill',JSON.stringify($scope.bfav));
+
+            };
+
+            $scope.deletel=function (lid) {
+                delete $scope.lfav[JSON.stringify(lid)];
+                localStorage.setItem('leg',JSON.stringify($scope.lfav));
+
+            };
 
         }
 
@@ -757,8 +860,8 @@
 <body>
 
 <div style="position: fixed; z-index: 1;background-color: white;width:100%">
-    <button id="tog" class="glyphicon glyphicon-menu-hamburger"
-            style="float: left;background-color: white;border: none;width: 40px;height: 40px"></button>
+    <button id="tog" class="glyphicon glyphicon-menu-hamburger btn btn-default"
+            style="float: left;border: none;width: 40px;height: 40px"></button>
     <h4 style="text-align: center"><a href="http://sunlightfoundation.com/" target="_blank"><img src="logo.png"></a>
         Congress API
     </h4>
@@ -782,7 +885,8 @@
         </div>
         <div ng-controller="LGC">
             <div id="myCarousel" class="carousel slide" data-interval="false">
-                <div id="legtab" class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
+                <div id="legtab"
+                     class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
                      style="background-color: whitesmoke">
                     <h1>Legislators</h1>
                     <hr>
@@ -1025,27 +1129,28 @@
                         </div>
                         <div class="item" style="background-color: white">
                             <div>
-                            <button class="glyphicon glyphicon-chevron-left" ng-click="back()"
-                                    style="background-color: white;height: 40px;border: none"></button>
-                            <h2 style="display: inline">Details</h2>
+                                <button class="glyphicon glyphicon-chevron-left btn btn-default" ng-click="back()"
+                                        style="height: 40px"></button>
+                                <h2 style="display: inline">Details</h2><button class="glyphicon glyphicon-star-empty  btn btn-default"
+                                                                                ng-click="savel(lgdet)" style="float: right"></button>
                             </div>
-                            <hr >
-                            <div class="row">
+                            <hr>
+                            <div class="row" style="padding: 20px">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <table class=" table table-responsive ">
+                                    <table class=" table  hidden-xs">
                                         <tbody>
                                         <tr>
                                             <td rowspan="5"><img src="{{lgdet.photo}}" width="130px"></td>
                                             <td>{{lgdet.name}}</td>
                                         </tr>
                                         <tr>
-                                            <td>{{lgdet.email}}</td>
+                                            <td><a href="mailto:{{lgdet.email}}">{{lgdet.email}}</a></td>
                                         </tr>
                                         <tr>
                                             <td>Chamber: {{lgdet.chamber}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Contact: {{lgdet.phone}}</td>
+                                            <td>Contact:<a href="tel:{{lgdet.phone}}"> {{lgdet.phone}}</a></td>
                                         </tr>
                                         <tr>
                                             <td><img src='{{lgdet.party }}' width='20px' height='20'/>
@@ -1054,17 +1159,42 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <table class=" table table-responsive ">
+
+                                    <table class=" table  visible-xs">
                                         <tbody>
                                         <tr>
-                                            <td>Start Term</td>
+                                            <td><img src="{{lgdet.photo}}" width="130px"
+                                                     style="margin: auto;display: block"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="mailto:{{lgdet.email}}">{{lgdet.email}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chamber: {{lgdet.chamber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact:<a href="tel:{{lgdet.phone}}"> {{lgdet.phone}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src='{{lgdet.party }}' width='20px' height='20'/>
+                                                {{lgdet.partytxt}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                    <table class=" table  ">
+                                        <tbody>
+                                        <tr>
+                                            <td class="hidden-xs">Start Term</td>
                                             <td>{{lgdet.tstart}}</td>
                                         </tr>
                                         <tr>
-                                            <td>End Term</td>
+                                            <td class="hidden-xs">End Term</td>
                                             <td>{{lgdet.tend}}</td>
                                         </tr>
-                                        <tr>
+                                        <tr class="hidden-xs">
                                             <td>Term</td>
                                             <td>
                                                 <div class="progress" style="margin: 0px">
@@ -1077,23 +1207,23 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Office</td>
+                                            <td class="hidden-xs">Office</td>
                                             <td>{{lgdet.office}}</td>
                                         </tr>
                                         <tr>
-                                            <td>State</td>
+                                            <td class="hidden-xs">State</td>
                                             <td>{{lgdet.state}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Fax</td>
-                                            <td>{{lgdet.fax}}</td>
+                                            <td class="hidden-xs">Fax</td>
+                                            <td><a href="fax+{{lgdet.fax}}">{{lgdet.fax}}</a></td>
                                         </tr>
                                         <tr>
-                                            <td>Birthday</td>
+                                            <td class="hidden-xs">Birthday</td>
                                             <td>{{lgdet.birthday}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Social Links</td>
+                                            <td class="hidden-xs">Social Links</td>
                                             <td><a href="https://www.twitter.com/{{lgdet.tid}}" target="_blank"><img
                                                     src="t.png" width="30px"></a>&nbsp;
                                                 <a href="https://www.facebook.com/{{lgdet.fid}}" target="_blank"><img
@@ -1124,7 +1254,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div ><h4>Bills</h4>
+                                    <div><h4>Bills</h4>
                                         <table class=" table table-responsive hidden-xs">
                                             <thead>
                                             <tr>
@@ -1170,7 +1300,8 @@
                 </div>
             </div>
             <div id="myCarousel2" class="carousel slide" data-interval="false">
-                <div id="billtab" class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
+                <div id="billtab"
+                     class=" xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
                      style="background-color: whitesmoke">
                     <h1>Bills</h1>
                     <hr>
@@ -1313,9 +1444,10 @@
                         </div>
                         <div class="item" style="background-color: white">
                             <div>
-                                <button class="glyphicon glyphicon-chevron-left" ng-click="back2()"
+                                <button class="glyphicon glyphicon-chevron-left btn btn-default" ng-click="back2()"
                                         style="background-color: white;height: 40px;border: none"></button>
-                                <h2 style="display: inline">Details</h2>
+                                <h2 style="display: inline">Details</h2><button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                                                ng-click="saveb(billdet)" style="float: right"></button>
                             </div>
                             <hr>
 
@@ -1361,7 +1493,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Version Status</td>
-                                                    <td>{{billdet. versionname}}</td>
+                                                    <td>{{billdet.versionname}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Bill URL</td>
@@ -1380,7 +1512,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="hidden-lg hidden-md" >
+                            <div class="hidden-lg hidden-md">
                                 <table class=" table table-responsive ">
                                     <tbody>
                                     <tr>
@@ -1435,7 +1567,9 @@
                     </div>
                 </div>
             </div>
-            <div id="comtab" class="xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1" style="background-color: whitesmoke">
+            <div id="comtab"
+                 class="xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
+                 style="background-color: whitesmoke">
                 <h1>Committees</h1>
                 <hr>
                 <div style="border: solid 1px lightgray;border-radius: 5px ">
@@ -1473,13 +1607,16 @@
                                             current-page="currentPage" pagination-id="comtab1"
                                             style="min-width: 400px">
 
-                                            <td><button class="glyphicon glyphicon-star-empty" ng-click="save(x,$event,'leg')"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                            <td>
+                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                        ng-click="savec(x)"></button>
+                                            </td>
+                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
+                                            <td>{{ x.comid}}</td>
+                                            <td>{{ x.name}}</td>
                                             <td>{{x.pcomid}}</td>
                                             <td>{{x.phone}}</td>
                                             <td>{{x.office}}</td>
@@ -1523,13 +1660,15 @@
                                             current-page="currentPage" pagination-id="comtab2"
                                             style="min-width: 400px">
 
-                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                            <td>
+                                                <button class="glyphicon glyphicon-star-empty btn btn-default" ng-click="savec(x)"></button>
+                                            </td>
+                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
+                                            <td>{{ x.comid}}</td>
+                                            <td>{{ x.name}}</td>
                                             <td>{{x.pcomid}}</td>
                                         </tr>
                                         <tbody>
@@ -1572,13 +1711,15 @@
                                             current-page="currentPage" pagination-id="comtab3"
                                             style="min-width: 400px">
 
-                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                            <td>
+                                                <button class="glyphicon glyphicon-star-empty btn btn-default" ng-click="savec(x)"></button>
+                                            </td>
+                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
+                                            <td>{{ x.comid}}</td>
+                                            <td>{{ x.name}}</td>
 
                                         </tr>
                                         <tbody>
@@ -1599,7 +1740,9 @@
 
                 </div>
             </div>
-            <div id="favtab" class="xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1" style="background-color: whitesmoke">
+            <div id="favtab"
+                 class="xblock col-lg-10 col-xs-11 col-sm-11  col-md-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-xs-offset-1"
+                 style="background-color: whitesmoke">
                 <h1>Favorites</h1>
                 <hr>
                 <div style="border: solid 1px lightgray;border-radius: 5px ">
@@ -1620,34 +1763,33 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Image</th>
                                             <th>Party</th>
                                             <th>Name</th>
                                             <th>Chamber</th>
                                             <th>State</th>
                                             <th>Email</th>
-                                            <th><button class='btn btn-primary'>View Detail
-                                            </button>
-                                            </th>
+                                            <th>View Details</th>
 
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr dir-paginate="x in com1| orderBy:'comid'| filter: q6 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab1"
-                                            style="min-width: 400px">
-
-                                            <td><button class="glyphicon glyphicon-star-empty" ng-click="save(x,$event,'leg')"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
-                                                x.chambertxt
-                                                }}
+                                        <tr ng-repeat="x in lfav">
+                                            <td><button class="btn btn-default" ng-click="deletel(x.id)"><i class="fa fa-trash" aria-hidden="true"></i> </button> </td>
+                                            <td><img src="{{x.photo}}" width="20px"/></td>
+                                            <td><img src="{{x.party}}" width="20px"/></td>
+                                            <td>{{x.name}}</td>
+                                            <td><img src='{{ x.chamberp }}' width='20px'/> {{x.chamber}}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
-                                            <td>{{x.pcomid}}</td>
-                                            <td>{{x.phone}}</td>
-                                            <td>{{x.office}}</td>
+
+                                            <td>{{x.state}}</td>
+                                            <td>{{x.email}}</td>
+                                            <td><button class='btn btn-primary'
+                                                   ng-click="favviewdetl(x.id)" >View Detail
+                                            </button>
+                                            </td>
+
                                         </tr>
                                         <tbody>
 
@@ -1656,9 +1798,7 @@
                             </div>
                             <div ng-controller="OtherController">
                                 <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="comtab1"
-                                    ></dir-pagination-controls>
+                                    <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
                                 </div>
                             </div>
 
@@ -1673,32 +1813,35 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Bill ID</th>
                                             <th>Bill Type</th>
                                             <th>Title</th>
                                             <th>Chamber</th>
-                                            <th>Introducted ON</th>
+                                            <th>Introducted On</th>
                                             <th>Sponsor</th>
-                                            <th><button class='btn btn-primary'>View Detail
-                                            </button>
-                                            <th>
+                                            <th>View Details</th>
 
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr dir-paginate="x in com2| orderBy:'comid'| filter: q7 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab2"
-                                            style="min-width: 400px">
-
-                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
-                                                x.chambertxt
+                                        <tr ng-repeat="x in bfav">
+                                            <td><button class="btn btn-default" ng-click="deleteb(x.id)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                            <td>{{x.id}}</td>
+                                            <td>{{x.billtype}}</td>
+                                            <td>{{x.title}}</td>
+                                            <td><img src='{{ x.chamberp }}' width='20px'/> {{
+                                                x.chamber
                                                 }}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
-                                            <td>{{x.pcomid}}</td>
+
+                                            <td>{{x.Introducted}}</td>
+                                            <td>{{x.sponsor}}</td>
+                                            <td><button class='btn btn-primary'
+                                                        ng-click="favviewdetb(x.id)" >View Detail
+                                            </button>
+                                            </td>
+
                                         </tr>
                                         <tbody>
 
@@ -1709,8 +1852,7 @@
                             </div>
                             <div ng-controller="OtherController">
                                 <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="comtab2"></dir-pagination-controls>
+                                    <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
                                 </div>
                             </div>
 
@@ -1725,7 +1867,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th>Icon</th>
+                                            <th> </th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1735,17 +1877,16 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr dir-paginate="x in com3| orderBy:'comid'| filter: q8 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab3"
-                                            style="min-width: 400px">
-
-                                            <td><button class="glyphicon glyphicon-star-empty"></button> </td>
-                                            <td ><img src='{{ x.chamber }}' width='20px'/> {{
+                                        <tr ng-repeat="x in cfav">
+                                            <td><button class="btn btn-default" ng-click="deletec(x.comid)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
                                             </td>
-                                            <td >{{ x.comid}}</td>
-                                            <td >{{ x.name}}</td>
+                                            <td>{{x.comid}}</td>
+                                            <td>{{x.name}}</td>
+                                            <td>{{x.pcomid}}</td>
+                                            <td>{{x.subc}}</td>
 
                                         </tr>
                                         <tbody>
@@ -1755,8 +1896,7 @@
                             </div>
                             <div ng-controller="OtherController">
                                 <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true"
-                                                             pagination-id="comtab3"></dir-pagination-controls>
+                                    <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
                                 </div>
                             </div>
 
