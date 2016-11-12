@@ -117,7 +117,7 @@
             $scope.com3 = [];
 
 
-            var requrl = 'CongressServer.php';
+            var requrl = 'http://congressinfo-env.us-west-2.elasticbeanstalk.com/index.php';
             var para1 = {request: 'reqlegislator'};
             var para2 = {request: 'reqlegislator', chamber: 'house'};
             var para3 = {request: 'reqlegislator', chamber: 'senate'};
@@ -411,7 +411,7 @@
                             var pcomid = obj.parent_committee_id;
                             var phone = obj.phone;
                             var office = obj.office;
-                            var subc=obj.subcommittee;
+                            var subc = obj.subcommittee;
 
                             if (chamber == "house") {
                                 chamber = 'h.png';
@@ -427,6 +427,16 @@
                                 office = "N.A.";
 
                             }
+
+                            if ($scope.cfav[JSON.stringify(comid)]) {
+
+                                cstarac = true;
+
+                            }
+                            else {
+                                cstarac = false;
+                            }
+
                             var comh = {
                                 chamber: chamber,
                                 chambertxt: chambertxt,
@@ -435,7 +445,8 @@
                                 pcomid: pcomid,
                                 phone: phone,
                                 office: office,
-                                subc:subc
+                                subc: subc,
+                                cstarac: cstarac
                             };
 
                             $scope.com1.push(comh);
@@ -460,7 +471,8 @@
                             var comid = obj.committee_id;
                             var name = obj.name;
                             var pcomid = obj.parent_committee_id;
-                            var subc=obj.subcommittee;
+                            var subc = obj.subcommittee;
+                            var cstarac;
 
 
                             if (chamber == "house") {
@@ -473,13 +485,23 @@
                                 chambertxt = 'Senate';
                             }
 
+                            if ($scope.cfav[JSON.stringify(comid)]) {
+
+                                cstarac = true;
+
+                            }
+                            else {
+                                cstarac = false;
+                            }
+
                             var comh = {
                                 chamber: chamber,
                                 chambertxt: chambertxt,
                                 comid: comid,
                                 name: name,
                                 pcomid: pcomid,
-                                subc:subc
+                                subc: subc,
+                                cstarac: cstarac
                             };
 
                             $scope.com2.push(comh);
@@ -504,7 +526,8 @@
                             var comid = obj.committee_id;
                             var name = obj.name;
                             var office = obj.office;
-                            var subc=obj.subcommittee;
+                            var subc = obj.subcommittee;
+                            var cstarac;
 
 
                             if (chamber == "house") {
@@ -526,12 +549,23 @@
                                 office = "N.A.";
 
                             }
+
+                            if ($scope.cfav[JSON.stringify(comid)]) {
+
+                                cstarac = true;
+
+                            }
+                            else {
+                                cstarac = false;
+                            }
+
                             var comh = {
                                 chamber: chamber,
                                 chambertxt: chambertxt,
                                 comid: comid,
                                 name: name,
-                                subc:subc
+                                subc: subc,
+                                cstarac: cstarac
                             };
 
                             $scope.com3.push(comh);
@@ -589,12 +623,12 @@
 
                             if (chamber == 'house') {
                                 chamber = 'House';
-                                chamberp='h.png';
+                                chamberp = 'h.png';
 
                             }
                             else if (chamber == 'senate') {
                                 chamber = 'Senate';
-                                chamberp='s.svg';
+                                chamberp = 's.svg';
 
                             }
 
@@ -612,25 +646,25 @@
                             tend = formatDate(tend);
                             birthday = formatDate(birthday);
 
-                            if($scope.lfav[JSON.stringify(id)]){
+                            if ($scope.lfav[JSON.stringify(id)]) {
 
-                                starac=true;
+                                starac = true;
 
 
                             }
-                            else{
-                                starac=false;
+                            else {
+                                starac = false;
                             }
 
 
                             $scope.lgdet = {
-                                id:id,
+                                id: id,
                                 photo: photo,
                                 partytxt: partytxt,
                                 name: name,
                                 email: email,
                                 chamber: chamber,
-                                chamberp:chamberp,
+                                chamberp: chamberp,
                                 phone: phone,
                                 party: party,
                                 tstart: tstart,
@@ -644,10 +678,8 @@
                                 web: web,
                                 per: per,
                                 percen: percen,
-                                starac:starac
+                                starac: starac
                             };
-
-
 
 
                         }, function errorCallback(response) {
@@ -704,7 +736,15 @@
                                 var title = obj.official_title;
                                 var type = obj.bill_type;
                                 var congress = obj.congress;
-                                var link = obj.last_version.urls.pdf;
+
+                                var link;
+                                if (obj.last_version) {
+                                    link = obj.last_version.urls.pdf;
+                                }
+                                else {
+                                    link = "";
+                                }
+
 
                                 var billforleg = {
                                     chamber: chamber,
@@ -726,7 +766,7 @@
 
             };
 //View legislator detail from fav
-            $scope.favviewdetl=function (id) {
+            $scope.favviewdetl = function (id) {
                 $('#favtab').hide();
                 $('#legtab').show();
                 $scope.viewdet(id);
@@ -763,25 +803,35 @@
                             var congressurl = obj.urls.congress;
                             var chamberp;
                             var bstarac;
+                            var versionname;
+                            var billurl;
 
-                            var versionname = obj.last_version.version_name;
-                            var billurl = obj.last_version.urls.pdf;
-
-                            if(chamber=='house'){
-                                chamber='House';
-                                chamberp='h.png';
+                            if(obj.last_version){
+                                versionname = obj.last_version.version_name;
+                                billurl = obj.last_version.urls.pdf;
                             }
-                            else if(chamber=='senate'){
-                                chamber='Senate';
-                                chamberp='s.svg';
+                            else {
+                                versionname="N.A.";
+                                billurl="";
                             }
 
-                            if($scope.bfav[JSON.stringify(id)]){
-                                bstarac=true;
+
+
+                            if (chamber == 'house') {
+                                chamber = 'House';
+                                chamberp = 'h.png';
+                            }
+                            else if (chamber == 'senate') {
+                                chamber = 'Senate';
+                                chamberp = 's.svg';
+                            }
+
+                            if ($scope.bfav[JSON.stringify(id)]) {
+                                bstarac = true;
 
                             }
-                            else{
-                                bstarac=false;
+                            else {
+                                bstarac = false;
                             }
 
                             $scope.billdet = {
@@ -790,13 +840,13 @@
                                 billtype: billtype,
                                 sponsor: sponsor,
                                 chamber: chamber,
-                                chamberp:chamberp,
+                                chamberp: chamberp,
                                 status: status,
                                 Introducted: Introducted,
                                 congressurl: congressurl,
                                 versionname: versionname,
                                 billurl: billurl,
-                                bstarsc:bstarac
+                                bstarac: bstarac
 
                             };
 
@@ -808,8 +858,8 @@
 
             };
 
- //View bill detail from fav
-            $scope.favviewdetb=function (id) {
+            //View bill detail from fav
+            $scope.favviewdetb = function (id) {
                 $('#favtab').hide();
                 $('#billtab').show();
                 $scope.billdetails(id);
@@ -831,61 +881,71 @@
             $scope.lfav = JSON.parse(localStorage.getItem('leg')) || {};
 
             $scope.savec = function (c) {
+                if (!c.cstarac) {
+                    c.cstarac = true;
+                    $scope.cfav[JSON.stringify(c.comid)] = c;
+                    localStorage.setItem('com', JSON.stringify($scope.cfav))
+                }
+                else {
+                    c.cstarac = false;
+                    delete $scope.cfav[JSON.stringify(c.comid)];
+                    localStorage.setItem('com', JSON.stringify($scope.cfav));
+                }
 
-                $scope.cfav[JSON.stringify(c.comid)] = c;
-                localStorage.setItem('com', JSON.stringify($scope.cfav));
+
             };
 
             $scope.saveb = function (b) {
-                if(!b.bstarac) {
-                    b.bstarac=true;
+                if (!b.bstarac) {
+                    b.bstarac = true;
                     $scope.bfav[JSON.stringify(b.id)] = b;
                     localStorage.setItem('bill', JSON.stringify($scope.bfav));
                 }
                 else {
-                    b.bstarac=false;
+                    b.bstarac = false;
                     delete $scope.bfav[JSON.stringify(b.id)];
-                    localStorage.setItem('bill',JSON.stringify($scope.bfav));
+                    localStorage.setItem('bill', JSON.stringify($scope.bfav));
 
                 }
             };
 
             $scope.savel = function (l) {
-                if(!l.starac)
-                {
-                    l.starac=true;
+                if (!l.starac) {
+                    l.starac = true;
                     $scope.lfav[JSON.stringify(l.id)] = l;
                     localStorage.setItem('leg', JSON.stringify($scope.lfav));
 
                 }
                 else {
-                    l.starac=false;
+                    l.starac = false;
                     delete $scope.lfav[JSON.stringify(l.id)];
-                    localStorage.setItem('leg',JSON.stringify($scope.lfav));
+                    localStorage.setItem('leg', JSON.stringify($scope.lfav));
                 }
 
 
             };
 
-            $scope.deletec=function (cid) {
-                delete $scope.cfav[JSON.stringify(cid)];
-                localStorage.setItem('com',JSON.stringify($scope.cfav));
+            $scope.deletec = function (c) {
+
+                c.cstarac = false;
+                delete $scope.cfav[JSON.stringify(c.comid)];
+                localStorage.setItem('com', JSON.stringify($scope.cfav));
 
             };
 
-            $scope.deleteb=function (b) {
+            $scope.deleteb = function (b) {
 
-                b.bstarac=false;
+                b.bstarac = false;
                 delete $scope.bfav[JSON.stringify(b.id)];
-                localStorage.setItem('bill',JSON.stringify($scope.bfav));
+                localStorage.setItem('bill', JSON.stringify($scope.bfav));
 
             };
 
-            $scope.deletel=function (l) {
+            $scope.deletel = function (l) {
 
-                l.starac=false;
+                l.starac = false;
                 delete $scope.lfav[JSON.stringify(l.id)];
-                localStorage.setItem('leg',JSON.stringify($scope.lfav));
+                localStorage.setItem('leg', JSON.stringify($scope.lfav));
 
             };
 
@@ -962,6 +1022,7 @@
                                         <option value="District Of Columbia">District Of Columbia</option>
                                         <option value="Florida">Florida</option>
                                         <option value="Georgia">Georgia</option>
+                                        <option value="Guam">Guam</option>
                                         <option value="Hawaii">Hawaii</option>
                                         <option value="Idaho">Idaho</option>
                                         <option value="Illinois">Illinois</option>
@@ -986,10 +1047,12 @@
                                         <option value="New York">New York</option>
                                         <option value="North Carolina">North Carolina</option>
                                         <option value="North Dakota">North Dakota</option>
+                                        <option value="Northern Mariana Islands">Northern Mariana Islands</option>
                                         <option value="Ohio">Ohio</option>
                                         <option value="Oklahoma">Oklahoma</option>
                                         <option value="Oregon">Oregon</option>
                                         <option value="Pennsylvania">Pennsylvania</option>
+                                        <option value="Puerto Rico">Puerto Rico</option><option value="US Virgin Islands">US Virgin Islands</option>
                                         <option value="Rhode Island">Rhode Island</option>
                                         <option value="South Carolina">South Carolina</option>
                                         <option value="South Dakota">South Dakota</option>
@@ -1025,7 +1088,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr dir-paginate="leg in leg1| orderBy:['statename','name']| filter:{statename:q1||undefined}:true | itemsPerPage: pageSize"
-                                                        current-page="currentPage" pagination-id="legtab1"
+                                                        pagination-id="legtab1"
                                                         style="min-width: 400px">
 
                                                         <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
@@ -1082,7 +1145,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr dir-paginate="leg in leg2|orderBy:['statename','name']| filter:q2 | itemsPerPage: pageSize"
-                                                        current-page="currentPage" pagination-id="legtab2"
+                                                        pagination-id="legtab2"
                                                         style="min-width: 400px">
 
                                                         <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
@@ -1138,7 +1201,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr dir-paginate="leg in leg3| orderBy:['statename','name']| filter:q3 | itemsPerPage: pageSize"
-                                                        current-page="currentPage" pagination-id="legtab3"
+                                                        pagination-id="legtab3"
                                                         style="min-width: 400px">
 
                                                         <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
@@ -1180,9 +1243,10 @@
                                         style="height: 40px"></button>
                                 <h2 style="display: inline">Details</h2>
                                 <button class="glyphicon glyphicon-star-empty  btn btn-default"
-                                                                                ng-click="savel(lgdet)" style="float: right">
-                                <span ng-if="lgdet.starac" class="glyphicon glyphicon-star" style="color: yellow;position: absolute;left: 12px;top:9px"></span>
-                            </button>
+                                        ng-click="savel(lgdet)" style="float: right">
+                                    <span ng-if="lgdet.starac" class="glyphicon glyphicon-star"
+                                          style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                </button>
                             </div>
                             <hr>
                             <div class="row" style="padding: 20px">
@@ -1390,7 +1454,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr dir-paginate="bill in bill1| orderBy:'billid'| filter:q4 | itemsPerPage: pageSize"
-                                                        current-page="currentPage" pagination-id="billtab1"
+                                                        pagination-id="billtab1"
                                                         style="min-width: 400px">
 
                                                         <td style="white-space: nowrap">{{ bill.billid}}</td>
@@ -1449,7 +1513,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr dir-paginate="bill in bill2| orderBy:'billid'| filter:q5 | itemsPerPage: pageSize"
-                                                        current-page="currentPage" pagination-id="billtab2"
+                                                        pagination-id="billtab2"
                                                         style="min-width: 400px">
 
                                                         <td style="white-space: nowrap">{{ bill.billid}}</td>
@@ -1496,10 +1560,12 @@
                             <div>
                                 <button class="glyphicon glyphicon-chevron-left btn btn-default" ng-click="back2()"
                                         style="background-color: white;height: 40px;border: none"></button>
-                                <h2 style="display: inline">Details</h2><button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                                                ng-click="saveb(billdet)" style="float: right">
-                                <span ng-if="billdet.bstarac" class="glyphicon glyphicon-star" style="color: yellow;position: absolute;left: 12px;top:9px"></span>
-                            </button>
+                                <h2 style="display: inline">Details</h2>
+                                <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                        ng-click="saveb(billdet)" style="float: right">
+                                    <span ng-if="billdet.bstarac" class="glyphicon glyphicon-star"
+                                          style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                </button>
                             </div>
                             <hr>
 
@@ -1644,7 +1710,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1656,12 +1722,15 @@
                                         </thead>
                                         <tbody>
                                         <tr dir-paginate="x in com1| orderBy:'comid'| filter: q6 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab1"
+                                            pagination-id="comtab1"
                                             style="min-width: 400px">
 
                                             <td>
                                                 <button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                        ng-click="savec(x)"></button>
+                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                  class="glyphicon glyphicon-star"
+                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                </button>
                                             </td>
                                             <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
@@ -1699,7 +1768,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1709,11 +1778,15 @@
                                         </thead>
                                         <tbody>
                                         <tr dir-paginate="x in com2| orderBy:'comid'| filter: q7 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab2"
+                                            pagination-id="comtab2"
                                             style="min-width: 400px">
 
                                             <td>
-                                                <button class="glyphicon glyphicon-star-empty btn btn-default" ng-click="savec(x)"></button>
+                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                  class="glyphicon glyphicon-star"
+                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                </button>
                                             </td>
                                             <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
@@ -1751,7 +1824,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1760,11 +1833,15 @@
                                         </thead>
                                         <tbody>
                                         <tr dir-paginate="x in com3| orderBy:'comid'| filter: q8 | itemsPerPage: pageSize"
-                                            current-page="currentPage" pagination-id="comtab3"
+                                           pagination-id="comtab3"
                                             style="min-width: 400px">
 
                                             <td>
-                                                <button class="glyphicon glyphicon-star-empty btn btn-default" ng-click="savec(x)"></button>
+                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                  class="glyphicon glyphicon-star"
+                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                </button>
                                             </td>
                                             <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
@@ -1815,7 +1892,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Image</th>
                                             <th>Party</th>
                                             <th>Name</th>
@@ -1828,7 +1905,10 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="x in lfav">
-                                            <td><button class="btn btn-default" ng-click="deletel(x)"><i class="fa fa-trash" aria-hidden="true"></i> </button> </td>
+                                            <td>
+                                                <button class="btn btn-default" ng-click="deletel(x)"><i
+                                                        class="fa fa-trash" aria-hidden="true"></i></button>
+                                            </td>
                                             <td><img src="{{x.photo}}" width="20px"/></td>
                                             <td><img src="{{x.party}}" width="20px"/></td>
                                             <td>{{x.name}}</td>
@@ -1837,9 +1917,10 @@
 
                                             <td>{{x.state}}</td>
                                             <td><a href="mailto:{{lgdet.email}}">{{lgdet.email}}</a></td>
-                                            <td><button class='btn btn-primary'
-                                                   ng-click="favviewdetl(x.id)" >View Detail
-                                            </button>
+                                            <td>
+                                                <button class='btn btn-primary'
+                                                        ng-click="favviewdetl(x.id)">View Detail
+                                                </button>
                                             </td>
 
                                         </tr>
@@ -1865,7 +1946,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Bill ID</th>
                                             <th>Bill Type</th>
                                             <th>Title</th>
@@ -1878,7 +1959,10 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="x in bfav">
-                                            <td><button class="btn btn-default" ng-click="deleteb(x)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                            <td>
+                                                <button class="btn btn-default" ng-click="deleteb(x)"><i
+                                                        class="fa fa-trash" aria-hidden="true"></i></button>
+                                            </td>
                                             <td>{{x.id}}</td>
                                             <td>{{x.billtype}}</td>
                                             <td>{{x.title}}</td>
@@ -1889,9 +1973,10 @@
 
                                             <td>{{x.Introducted}}</td>
                                             <td>{{x.sponsor}}</td>
-                                            <td><button class='btn btn-primary'
-                                                        ng-click="favviewdetb(x.id)" >View Detail
-                                            </button>
+                                            <td>
+                                                <button class='btn btn-primary'
+                                                        ng-click="favviewdetb(x.id)">View Detail
+                                                </button>
                                             </td>
 
                                         </tr>
@@ -1919,7 +2004,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th> </th>
+                                            <th></th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1930,7 +2015,10 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="x in cfav">
-                                            <td><button class="btn btn-default" ng-click="deletec(x.comid)"><i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                            <td>
+                                                <button class="btn btn-default" ng-click="deletec(x)"><i
+                                                        class="fa fa-trash" aria-hidden="true"></i></button>
+                                            </td>
                                             <td><img src='{{ x.chamber }}' width='20px'/> {{
                                                 x.chambertxt
                                                 }}
