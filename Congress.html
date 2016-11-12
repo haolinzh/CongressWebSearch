@@ -22,6 +22,11 @@
             border: solid 1px lightgray;
         }
 
+        .yblock {
+            border: solid 1px lightgray;
+            margin: 10px;
+        }
+
         .well {
             padding: 10px;
         }
@@ -806,15 +811,14 @@
                             var versionname;
                             var billurl;
 
-                            if(obj.last_version){
+                            if (obj.last_version) {
                                 versionname = obj.last_version.version_name;
                                 billurl = obj.last_version.urls.pdf;
                             }
                             else {
-                                versionname="N.A.";
-                                billurl="";
+                                versionname = "N.A.";
+                                billurl = "";
                             }
-
 
 
                             if (chamber == 'house') {
@@ -1005,10 +1009,13 @@
                                     <li id="tab12"><a data-toggle="tab" href="#12">House</a></li>
                                     <li id="tab13"><a data-toggle="tab" href="#13">Senate</a></li>
                                 </ul>
-                                <div class="tab-content">
-                                    <div id="11" class="tab-pane fade in active">
-                                        <div class="well" style="margin: 0;">Legislators<br class="visible-xs"> By State
-                                            <span> <select class="col-xs-6 col-sm-6 col-md-2 col-lg-2" style="float: right" ng-model="q1" id="sel1">
+                                <div class="yblock">
+                                    <div class="tab-content">
+                                        <div id="11" class="tab-pane fade in active">
+                                            <div class="well" style="margin: 0;">Legislators<br class="visible-xs"> By
+                                                State
+                                                <span> <select class="col-xs-6 col-sm-6 col-md-2 col-lg-2"
+                                                               style="float: right" ng-model="q1" id="sel1">
                                         <option value>All States</option>
                                         <option value="Alabama">Alabama</option>
                                         <option value="Alaska">Alaska</option>
@@ -1052,7 +1059,8 @@
                                         <option value="Oklahoma">Oklahoma</option>
                                         <option value="Oregon">Oregon</option>
                                         <option value="Pennsylvania">Pennsylvania</option>
-                                        <option value="Puerto Rico">Puerto Rico</option><option value="US Virgin Islands">US Virgin Islands</option>
+                                        <option value="Puerto Rico">Puerto Rico</option><option
+                                                        value="US Virgin Islands">US Virgin Islands</option>
                                         <option value="Rhode Island">Rhode Island</option>
                                         <option value="South Carolina">South Carolina</option>
                                         <option value="South Dakota">South Dakota</option>
@@ -1069,172 +1077,175 @@
                                     </select>
                                 </span>
 
-                                        </div>
-                                        <div class="panel panel-default">
-
-                                            <div class="panel-body" style="overflow: scroll">
-
-                                                <table class=" table table-hover table-responsive">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Party</th>
-                                                        <th>Name</th>
-                                                        <th>Chamber</th>
-                                                        <th>District</th>
-                                                        <th>State</th>
-                                                        <th>Detail</th>
-
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr dir-paginate="leg in leg1| orderBy:['statename','name']| filter:{statename:q1||undefined}:true | itemsPerPage: pageSize"
-                                                        pagination-id="legtab1"
-                                                        style="min-width: 400px">
-
-                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
-                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
-                                                                                             width='20px'
-                                                                                             height='20'/> {{
-                                                            leg.chambertxt
-                                                            }}
-                                                        </td>
-                                                        <td style="white-space: nowrap">{{ leg.district}}</td>
-                                                        <td>{{ leg.statename}}</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'
-                                                                    ng-click="viewdet(leg.bioid)">View Detail
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tbody>
-
-                                                </table>
                                             </div>
-                                            <div ng-controller="OtherController">
-                                                <div class="text-center">
-                                                    <dir-pagination-controls boundary-links="true"
-                                                                             pagination-id="legtab1"
-                                                    ></dir-pagination-controls>
+                                            <div class="panel panel-default">
+
+                                                <div class="panel-body" style="overflow: scroll">
+
+                                                    <table class=" table table-hover table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Party</th>
+                                                            <th>Name</th>
+                                                            <th>Chamber</th>
+                                                            <th>District</th>
+                                                            <th>State</th>
+                                                            <th>Detail</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr dir-paginate="leg in leg1| orderBy:['statename','name']| filter:{statename:q1||undefined}:true | itemsPerPage: pageSize"
+                                                            pagination-id="legtab1"
+                                                            style="min-width: 400px">
+
+                                                            <td><img src='{{ leg.party }}' width='20px' height='20'/>
+                                                            </td>
+                                                            <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                                 width='20px'
+                                                                                                 height='20'/> {{
+                                                                leg.chambertxt
+                                                                }}
+                                                            </td>
+                                                            <td style="white-space: nowrap">{{ leg.district}}</td>
+                                                            <td>{{ leg.statename}}</td>
+                                                            <td>
+                                                                <button class='btn btn-primary'
+                                                                        ng-click="viewdet(leg.bioid)">View Detail
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tbody>
+
+                                                    </table>
+                                                </div>
+                                                <div ng-controller="OtherController">
+                                                    <div class="text-center">
+                                                        <dir-pagination-controls boundary-links="true"
+                                                                                 pagination-id="legtab1"
+                                                        ></dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-
-                                    </div>
-                                    <div id="12" class="tab-pane fade">
-                                        <div class="well" style="margin: 0;"><span>Legislators<br
-                                                class="visible-xs"> By House</span>
-                                            <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q2" id="search12" style="float: right"
-                                                   placeholder="Search">
 
                                         </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-body" style="overflow: scroll">
+                                        <div id="12" class="tab-pane fade">
+                                            <div class="well" style="margin: 0;"><span>Legislators<br
+                                                    class="visible-xs"> By House</span>
+                                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text"
+                                                       ng-model="q2" id="search12" style="float: right"
+                                                       placeholder="Search">
 
-                                                <table class=" table table-hover table-responsive">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Party</th>
-                                                        <th>Name</th>
-                                                        <th>Chamber</th>
-                                                        <th>District</th>
-                                                        <th>State</th>
-                                                        <th>Detail</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr dir-paginate="leg in leg2|orderBy:['statename','name']| filter:q2 | itemsPerPage: pageSize"
-                                                        pagination-id="legtab2"
-                                                        style="min-width: 400px">
-
-                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
-                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
-                                                                                             width='20px'
-                                                                                             height='20'/> {{
-                                                            leg.chambertxt
-                                                            }}
-                                                        </td>
-                                                        <td style="white-space: nowrap">{{ leg.district}}</td>
-                                                        <td>{{ leg.statename}}</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'
-                                                                    ng-click="viewdet(leg.bioid)">View Detail
-                                                            </button>
-                                                        </td>
-                                                    <tr>
-                                                    <tbody>
-
-
-                                                </table>
                                             </div>
-                                            <div ng-controller="OtherController">
-                                                <div class="text-center">
-                                                    <dir-pagination-controls boundary-links="true"
-                                                                             pagination-id="legtab2"></dir-pagination-controls>
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="overflow: scroll">
+
+                                                    <table class=" table table-hover table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Party</th>
+                                                            <th>Name</th>
+                                                            <th>Chamber</th>
+                                                            <th>District</th>
+                                                            <th>State</th>
+                                                            <th>Detail</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr dir-paginate="leg in leg2|orderBy:['statename','name']| filter:q2 | itemsPerPage: pageSize"
+                                                            pagination-id="legtab2"
+                                                            style="min-width: 400px">
+
+                                                            <td><img src='{{ leg.party }}' width='20px' height='20'/>
+                                                            </td>
+                                                            <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                                 width='20px'
+                                                                                                 height='20'/> {{
+                                                                leg.chambertxt
+                                                                }}
+                                                            </td>
+                                                            <td style="white-space: nowrap">{{ leg.district}}</td>
+                                                            <td>{{ leg.statename}}</td>
+                                                            <td>
+                                                                <button class='btn btn-primary'
+                                                                        ng-click="viewdet(leg.bioid)">View Detail
+                                                                </button>
+                                                            </td>
+                                                        <tr>
+                                                        <tbody>
+
+
+                                                    </table>
+                                                </div>
+                                                <div ng-controller="OtherController">
+                                                    <div class="text-center">
+                                                        <dir-pagination-controls boundary-links="true"
+                                                                                 pagination-id="legtab2"></dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-
-                                    </div>
-                                    <div id="13" class="tab-pane fade">
-                                        <div class="well" style="margin: 0;"><span>Legislators<br
-                                                class="visible-xs"> By Senate</span>
-                                            <input  class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q3" id="search13" style="float: right"
-                                                   placeholder="Search">
 
                                         </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-body" style="overflow: scroll">
+                                        <div id="13" class="tab-pane fade">
+                                            <div class="well" style="margin: 0;"><span>Legislators<br
+                                                    class="visible-xs"> By Senate</span>
+                                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text"
+                                                       ng-model="q3" id="search13" style="float: right"
+                                                       placeholder="Search">
 
-                                                <table class=" table table-hover table-responsive">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Party</th>
-                                                        <th>Name</th>
-                                                        <th>Chamber</th>
-                                                        <th>State</th>
-                                                        <th>Detail</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr dir-paginate="leg in leg3| orderBy:['statename','name']| filter:q3 | itemsPerPage: pageSize"
-                                                        pagination-id="legtab3"
-                                                        style="min-width: 400px">
-
-                                                        <td><img src='{{ leg.party }}' width='20px' height='20'/></td>
-                                                        <td style="white-space: nowrap">{{ leg.name }}</td>
-                                                        <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
-                                                                                             width='20px'
-                                                                                             height='20'/> {{
-                                                            leg.chambertxt
-                                                            }}
-                                                        </td>
-                                                        <td>{{ leg.statename}}</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'
-                                                                    ng-click="viewdet(leg.bioid)">View Detail
-                                                            </button>
-                                                        </td>
-                                                    <tr>
-                                                    <tbody>
-
-                                                </table>
                                             </div>
-                                            <div ng-controller="OtherController">
-                                                <div class="text-center">
-                                                    <dir-pagination-controls boundary-links="true"
-                                                                             pagination-id="legtab3"></dir-pagination-controls>
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="overflow: scroll">
+
+                                                    <table class=" table table-hover table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Party</th>
+                                                            <th>Name</th>
+                                                            <th>Chamber</th>
+                                                            <th>State</th>
+                                                            <th>Detail</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr dir-paginate="leg in leg3| orderBy:['statename','name']| filter:q3 | itemsPerPage: pageSize"
+                                                            pagination-id="legtab3"
+                                                            style="min-width: 400px">
+
+                                                            <td><img src='{{ leg.party }}' width='20px' height='20'/>
+                                                            </td>
+                                                            <td style="white-space: nowrap">{{ leg.name }}</td>
+                                                            <td style="white-space: nowrap"><img src='{{ leg.chamber }}'
+                                                                                                 width='20px'
+                                                                                                 height='20'/> {{
+                                                                leg.chambertxt
+                                                                }}
+                                                            </td>
+                                                            <td>{{ leg.statename}}</td>
+                                                            <td>
+                                                                <button class='btn btn-primary'
+                                                                        ng-click="viewdet(leg.bioid)">View Detail
+                                                                </button>
+                                                            </td>
+                                                        <tr>
+                                                        <tbody>
+
+                                                    </table>
+                                                </div>
+                                                <div ng-controller="OtherController">
+                                                    <div class="text-center">
+                                                        <dir-pagination-controls boundary-links="true"
+                                                                                 pagination-id="legtab3"></dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="item" style="background-color: white">
@@ -1427,130 +1438,135 @@
                                     <li id="tab22"><a data-toggle="tab" href="#22">New Bills</a></li>
 
                                 </ul>
-                                <div class="tab-content">
-                                    <div id="21" class="tab-pane fade in active">
-                                        <div class="well" style="margin: 0;">Active Bills
-                                            <span> <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q4" id="search21" style="float: right"
-                                                          placeholder="Search"
-                                            ></span>
+                                <div class="yblock">
+                                    <div class="tab-content">
+                                        <div id="21" class="tab-pane fade in active">
+                                            <div class="well" style="margin: 0;">Active Bills
+                                                <span> <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text"
+                                                              ng-model="q4" id="search21" style="float: right"
+                                                              placeholder="Search"
+                                                ></span>
 
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-body" style="overflow: scroll">
-
-                                                <table class=" table table-hover table-responsive">
-                                                    <thead>
-                                                    <tr>
-                                                        <th style="white-space: nowrap">Bill ID</th>
-                                                        <th style="white-space: nowrap">Bill Type</th>
-                                                        <th style="white-space: nowrap" class="hidden-xs hidden-sm">
-                                                            Title
-                                                        </th>
-                                                        <th style="white-space: nowrap">Chamber</th>
-                                                        <th style="white-space: nowrap">Introducted on</th>
-                                                        <th style="white-space: nowrap">Sponsor</th>
-                                                        <th>Detail</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr dir-paginate="bill in bill1| orderBy:'-introducted'| filter:q4 | itemsPerPage: pageSize"
-                                                        pagination-id="billtab1"
-                                                        style="min-width: 400px">
-
-                                                        <td style="white-space: nowrap">{{ bill.billid}}</td>
-                                                        <td>{{ bill.billtype}}</td>
-                                                        <td class="hidden-xs hidden-sm">{{ bill.billtitle}}</td>
-                                                        <td style="white-space: nowrap"><img src='{{ bill.chamber }}'
-                                                                                             width='20px'
-                                                                                             height='20'/> {{
-                                                            bill.chambertxt
-                                                            }}
-                                                        </td>
-                                                        <td>{{ bill.introducted}}</td>
-                                                        <td style="white-space: nowrap">{{ bill.sponsor}}</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'
-                                                                    ng-click="billdetails(bill.billidl)">View Detail
-                                                            </button>
-                                                        </td>
-                                                    <tr>
-                                                    <tbody>
-
-                                                </table>
                                             </div>
-                                            <div ng-controller="OtherController">
-                                                <div class="text-center">
-                                                    <dir-pagination-controls boundary-links="true"
-                                                                             pagination-id="billtab1"
-                                                    ></dir-pagination-controls>
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="overflow: scroll">
+
+                                                    <table class=" table table-hover table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="white-space: nowrap">Bill ID</th>
+                                                            <th style="white-space: nowrap">Bill Type</th>
+                                                            <th style="white-space: nowrap" class="hidden-xs hidden-sm">
+                                                                Title
+                                                            </th>
+                                                            <th style="white-space: nowrap">Chamber</th>
+                                                            <th style="white-space: nowrap">Introducted on</th>
+                                                            <th style="white-space: nowrap">Sponsor</th>
+                                                            <th>Detail</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr dir-paginate="bill in bill1| orderBy:'-introducted'| filter:q4 | itemsPerPage: pageSize"
+                                                            pagination-id="billtab1"
+                                                            style="min-width: 400px">
+
+                                                            <td style="white-space: nowrap">{{ bill.billid}}</td>
+                                                            <td>{{ bill.billtype}}</td>
+                                                            <td class="hidden-xs hidden-sm">{{ bill.billtitle}}</td>
+                                                            <td style="white-space: nowrap"><img
+                                                                    src='{{ bill.chamber }}'
+                                                                    width='20px'
+                                                                    height='20'/> {{
+                                                                bill.chambertxt
+                                                                }}
+                                                            </td>
+                                                            <td>{{ bill.introducted}}</td>
+                                                            <td style="white-space: nowrap">{{ bill.sponsor}}</td>
+                                                            <td>
+                                                                <button class='btn btn-primary'
+                                                                        ng-click="billdetails(bill.billidl)">View Detail
+                                                                </button>
+                                                            </td>
+                                                        <tr>
+                                                        <tbody>
+
+                                                    </table>
+                                                </div>
+                                                <div ng-controller="OtherController">
+                                                    <div class="text-center">
+                                                        <dir-pagination-controls boundary-links="true"
+                                                                                 pagination-id="billtab1"
+                                                        ></dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-
-                                    </div>
-                                    <div id="22" class="tab-pane fade">
-                                        <div class="well" style="margin: 0;"><span>New Bills</span>
-                                            <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q5" id="search22" style="float: right"
-                                                   placeholder="Search">
 
                                         </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-body" style="overflow: scroll">
-                                                <table class=" table table-hover table-responsive">
-                                                    <thead>
-                                                    <tr>
-                                                        <th style="white-space: nowrap">Bill ID</th>
-                                                        <th style="white-space: nowrap">Bill Type</th>
-                                                        <th style="white-space: nowrap" class="hidden-xs hidden-sm">
-                                                            Title
-                                                        </th>
-                                                        <th style="white-space: nowrap">Chamber</th>
-                                                        <th style="white-space: nowrap">Introducted on</th>
-                                                        <th style="white-space: nowrap">Sponsor</th>
-                                                        <th>Detail</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr dir-paginate="bill in bill2| orderBy:'-introducted'| filter:q5 | itemsPerPage: pageSize"
-                                                        pagination-id="billtab2"
-                                                        style="min-width: 400px">
+                                        <div id="22" class="tab-pane fade">
+                                            <div class="well" style="margin: 0;"><span>New Bills</span>
+                                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text"
+                                                       ng-model="q5" id="search22" style="float: right"
+                                                       placeholder="Search">
 
-                                                        <td style="white-space: nowrap">{{ bill.billid}}</td>
-                                                        <td>{{ bill.billtype}}</td>
-                                                        <td class="hidden-xs hidden-sm">{{ bill.billtitle}}</td>
-                                                        <td style="white-space: nowrap"><img src='{{ bill.chamber }}'
-                                                                                             width='20px'
-                                                                                             height='20'/> {{
-                                                            bill.chambertxt
-                                                            }}
-                                                        </td>
-                                                        <td>{{ bill.introducted}}</td>
-                                                        <td style="white-space: nowrap">{{ bill.sponsor}}</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'
-                                                                    ng-click="billdetails( bill.billidl)">View Detail
-                                                            </button>
-                                                        </td>
-                                                    <tr>
-                                                    <tbody>
-
-                                                </table>
                                             </div>
-                                            <div ng-controller="OtherController">
-                                                <div class="text-center">
-                                                    <dir-pagination-controls boundary-links="true"
-                                                                             pagination-id="billtab2"
-                                                    ></dir-pagination-controls>
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="overflow: scroll">
+                                                    <table class=" table table-hover table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="white-space: nowrap">Bill ID</th>
+                                                            <th style="white-space: nowrap">Bill Type</th>
+                                                            <th style="white-space: nowrap" class="hidden-xs hidden-sm">
+                                                                Title
+                                                            </th>
+                                                            <th style="white-space: nowrap">Chamber</th>
+                                                            <th style="white-space: nowrap">Introducted on</th>
+                                                            <th style="white-space: nowrap">Sponsor</th>
+                                                            <th>Detail</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr dir-paginate="bill in bill2| orderBy:'-introducted'| filter:q5 | itemsPerPage: pageSize"
+                                                            pagination-id="billtab2"
+                                                            style="min-width: 400px">
+
+                                                            <td style="white-space: nowrap">{{ bill.billid}}</td>
+                                                            <td>{{ bill.billtype}}</td>
+                                                            <td class="hidden-xs hidden-sm">{{ bill.billtitle}}</td>
+                                                            <td style="white-space: nowrap"><img
+                                                                    src='{{ bill.chamber }}'
+                                                                    width='20px'
+                                                                    height='20'/> {{
+                                                                bill.chambertxt
+                                                                }}
+                                                            </td>
+                                                            <td>{{ bill.introducted}}</td>
+                                                            <td style="white-space: nowrap">{{ bill.sponsor}}</td>
+                                                            <td>
+                                                                <button class='btn btn-primary'
+                                                                        ng-click="billdetails( bill.billidl)">View
+                                                                    Detail
+                                                                </button>
+                                                            </td>
+                                                        <tr>
+                                                        <tbody>
+
+                                                    </table>
+                                                </div>
+                                                <div ng-controller="OtherController">
+                                                    <div class="text-center">
+                                                        <dir-pagination-controls boundary-links="true"
+                                                                                 pagination-id="billtab2"
+                                                        ></dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
+
+
                                         </div>
 
-
-
                                     </div>
-
                                 </div>
 
                             </div>
@@ -1698,180 +1714,182 @@
                         <li id="tab32"><a data-toggle="tab" href="#32">Senate</a></li>
                         <li id="tab33"><a data-toggle="tab" href="#33">Joint</a></li>
                     </ul>
-                    <div class="tab-content">
-                        <div id="31" class="tab-pane fade in active">
-                            <div class="well" style="margin: 0;">House
-                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q6" id="search31" style="float: right"
-                                       placeholder="Search">
+                    <div class="yblock">
+                        <div class="tab-content">
+                            <div id="31" class="tab-pane fade in active">
+                                <div class="well" style="margin: 0;">House
+                                    <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q6"
+                                           id="search31" style="float: right"
+                                           placeholder="Search">
 
-                            </div>
-                            <div class="panel panel-default">
-
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Chamber</th>
-                                            <th>Committee ID</th>
-                                            <th>Name</th>
-                                            <th>Parent Committee</th>
-                                            <th>Contact</th>
-                                            <th>Office</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="x in com1| orderBy:'comid'| filter: q6 | itemsPerPage: pageSize"
-                                            pagination-id="comtab1"
-                                            style="min-width: 400px">
-
-                                            <td>
-                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
-                                                                                  class="glyphicon glyphicon-star"
-                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
-                                                </button>
-                                            </td>
-                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
-                                                x.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ x.comid}}</td>
-                                            <td>{{ x.name}}</td>
-                                            <td>{{x.pcomid}}</td>
-                                            <td>{{x.phone}}</td>
-                                            <td>{{x.office}}</td>
-                                        </tr>
-                                        <tbody>
-
-                                    </table>
                                 </div>
-                                <div ng-controller="OtherController">
-                                    <div class="text-center">
-                                        <dir-pagination-controls boundary-links="true"
-                                                                 pagination-id="comtab1"
-                                        ></dir-pagination-controls>
+                                <div class="panel panel-default">
+
+                                    <div class="panel-body" style="overflow: scroll">
+
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Chamber</th>
+                                                <th>Committee ID</th>
+                                                <th>Name</th>
+                                                <th>Parent Committee</th>
+                                                <th>Contact</th>
+                                                <th>Office</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="x in com1| orderBy:'comid'| filter: q6 | itemsPerPage: pageSize"
+                                                pagination-id="comtab1"
+                                                style="min-width: 400px">
+
+                                                <td>
+                                                    <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                            ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                      class="glyphicon glyphicon-star"
+                                                                                      style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                    </button>
+                                                </td>
+                                                <td><img src='{{ x.chamber }}' width='20px'/> {{
+                                                    x.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ x.comid}}</td>
+                                                <td>{{ x.name}}</td>
+                                                <td>{{x.pcomid}}</td>
+                                                <td>{{x.phone}}</td>
+                                                <td>{{x.office}}</td>
+                                            </tr>
+                                            <tbody>
+
+                                        </table>
                                     </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div id="32" class="tab-pane fade">
-                            <div class="well" style="margin: 0;">Senate
-                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q7" id="search32" style="float: right"
-                                       placeholder="Search">
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th> </th>
-                                            <th>Chamber</th>
-                                            <th>Committee ID</th>
-                                            <th>Name</th>
-                                            <th>Parent Committee</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="x in com2| orderBy:'comid'| filter: q7 | itemsPerPage: pageSize"
-                                            pagination-id="comtab2"
-                                            style="min-width: 400px">
-
-                                            <td>
-                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
-                                                                                  class="glyphicon glyphicon-star"
-                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
-                                                </button>
-                                            </td>
-                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
-                                                x.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ x.comid}}</td>
-                                            <td>{{ x.name}}</td>
-                                            <td>{{x.pcomid}}</td>
-                                        </tr>
-                                        <tbody>
-
-                                    </table>
-
-
-                                </div>
-                                <div ng-controller="OtherController">
-                                    <div class="text-center">
-                                        <dir-pagination-controls boundary-links="true"
-                                                                 pagination-id="comtab2"></dir-pagination-controls>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div id="33" class="tab-pane fade">
-                            <div class="well" style="margin: 0;">Joint
-                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q8" id="search33" style="float: right"
-                                       placeholder="Search">
-
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="overflow: scroll">
-
-                                    <table class=" table table-hover table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Chamber</th>
-                                            <th>Committee ID</th>
-                                            <th>Name</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr dir-paginate="x in com3| orderBy:'comid'| filter: q8 | itemsPerPage: pageSize"
-                                           pagination-id="comtab3"
-                                            style="min-width: 400px">
-
-                                            <td>
-                                                <button class="glyphicon glyphicon-star-empty btn btn-default"
-                                                        ng-click="savec(x)"><span ng-if="x.cstarac"
-                                                                                  class="glyphicon glyphicon-star"
-                                                                                  style="color: yellow;position: absolute;left: 12px;top:9px"></span>
-                                                </button>
-                                            </td>
-                                            <td><img src='{{ x.chamber }}' width='20px'/> {{
-                                                x.chambertxt
-                                                }}
-                                            </td>
-                                            <td>{{ x.comid}}</td>
-                                            <td>{{ x.name}}</td>
-
-                                        </tr>
-                                        <tbody>
-
-                                    </table>
-                                </div>
-                                <div ng-controller="OtherController">
-                                    <div class="text-center">
-                                        <dir-pagination-controls boundary-links="true"
-                                                                 pagination-id="comtab3"></dir-pagination-controls>
+                                    <div ng-controller="OtherController">
+                                        <div class="text-center">
+                                            <dir-pagination-controls boundary-links="true"
+                                                                     pagination-id="comtab1"
+                                            ></dir-pagination-controls>
+                                        </div>
                                     </div>
                                 </div>
 
+
                             </div>
+                            <div id="32" class="tab-pane fade">
+                                <div class="well" style="margin: 0;">Senate
+                                    <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q7"
+                                           id="search32" style="float: right"
+                                           placeholder="Search">
+
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="overflow: scroll">
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Chamber</th>
+                                                <th>Committee ID</th>
+                                                <th>Name</th>
+                                                <th>Parent Committee</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="x in com2| orderBy:'comid'| filter: q7 | itemsPerPage: pageSize"
+                                                pagination-id="comtab2"
+                                                style="min-width: 400px">
+
+                                                <td>
+                                                    <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                            ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                      class="glyphicon glyphicon-star"
+                                                                                      style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                    </button>
+                                                </td>
+                                                <td><img src='{{ x.chamber }}' width='20px'/> {{
+                                                    x.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ x.comid}}</td>
+                                                <td>{{ x.name}}</td>
+                                                <td>{{x.pcomid}}</td>
+                                            </tr>
+                                            <tbody>
+
+                                        </table>
 
 
+                                    </div>
+                                    <div ng-controller="OtherController">
+                                        <div class="text-center">
+                                            <dir-pagination-controls boundary-links="true"
+                                                                     pagination-id="comtab2"></dir-pagination-controls>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div id="33" class="tab-pane fade">
+                                <div class="well" style="margin: 0;">Joint
+                                    <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q8"
+                                           id="search33" style="float: right"
+                                           placeholder="Search">
+
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="overflow: scroll">
+
+                                        <table class=" table table-hover table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Chamber</th>
+                                                <th>Committee ID</th>
+                                                <th>Name</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr dir-paginate="x in com3| orderBy:'comid'| filter: q8 | itemsPerPage: pageSize"
+                                                pagination-id="comtab3"
+                                                style="min-width: 400px">
+
+                                                <td>
+                                                    <button class="glyphicon glyphicon-star-empty btn btn-default"
+                                                            ng-click="savec(x)"><span ng-if="x.cstarac"
+                                                                                      class="glyphicon glyphicon-star"
+                                                                                      style="color: yellow;position: absolute;left: 12px;top:9px"></span>
+                                                    </button>
+                                                </td>
+                                                <td><img src='{{ x.chamber }}' width='20px'/> {{
+                                                    x.chambertxt
+                                                    }}
+                                                </td>
+                                                <td>{{ x.comid}}</td>
+                                                <td>{{ x.name}}</td>
+
+                                            </tr>
+                                            <tbody>
+
+                                        </table>
+                                    </div>
+                                    <div ng-controller="OtherController">
+                                        <div class="text-center">
+                                            <dir-pagination-controls boundary-links="true"
+                                                                     pagination-id="comtab3"></dir-pagination-controls>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div id="favtab"
@@ -1881,10 +1899,12 @@
                 <hr>
                 <div style="border: solid 1px lightgray;border-radius: 5px ">
                     <ul class="nav nav-tabs" style="background-color: white">
-                        <li id="tab41" class="active"><a data-toggle="tab" href="#41" style="padding: 10px">Legislators</a></li>
-                        <li id="tab42"><a data-toggle="tab" href="#42"style="padding: 12px" >Bills</a></li>
+                        <li id="tab41" class="active"><a data-toggle="tab" href="#41"
+                                                         style="padding: 10px">Legislators</a></li>
+                        <li id="tab42"><a data-toggle="tab" href="#42" style="padding: 12px">Bills</a></li>
                         <li id="tab43"><a data-toggle="tab" href="#43" style="padding: 12px">Committees</a></li>
                     </ul>
+                    <div class="yblock">
                     <div class="tab-content">
                         <div id="41" class="tab-pane fade in active">
                             <div class="well" style="margin: 0;">Favorites Legislators
@@ -2047,6 +2067,7 @@
 
 
                         </div>
+                    </div>
                     </div>
 
                 </div>
