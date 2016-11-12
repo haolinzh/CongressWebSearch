@@ -1008,7 +1008,7 @@
                                 <div class="tab-content">
                                     <div id="11" class="tab-pane fade in active">
                                         <div class="well" style="margin: 0;">Legislators<br class="visible-xs"> By State
-                                            <span> <select style="float: right" ng-model="q1" id="sel1">
+                                            <span> <select class="col-xs-6 col-sm-6 col-md-2 col-lg-2" style="float: right" ng-model="q1" id="sel1">
                                         <option value>All States</option>
                                         <option value="Alabama">Alabama</option>
                                         <option value="Alaska">Alaska</option>
@@ -1125,7 +1125,7 @@
                                     <div id="12" class="tab-pane fade">
                                         <div class="well" style="margin: 0;"><span>Legislators<br
                                                 class="visible-xs"> By House</span>
-                                            <input type="text" ng-model="q2" id="search12" style="float: right"
+                                            <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q2" id="search12" style="float: right"
                                                    placeholder="Search">
 
                                         </div>
@@ -1182,7 +1182,7 @@
                                     <div id="13" class="tab-pane fade">
                                         <div class="well" style="margin: 0;"><span>Legislators<br
                                                 class="visible-xs"> By Senate</span>
-                                            <input type="text" ng-model="q3" id="search13" style="float: right"
+                                            <input  class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q3" id="search13" style="float: right"
                                                    placeholder="Search">
 
                                         </div>
@@ -1355,14 +1355,14 @@
                                             <tr>
                                                 <th>Chamber</th>
                                                 <th>Comittee ID</th>
-                                                <th>Name</th>
+                                                <th class="hidden-xs">Name</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr ng-repeat="x in comforlegs">
                                                 <td>{{x.chamber}}</td>
                                                 <td>{{x.cid}}</td>
-                                                <td>{{x.name}}</td>
+                                                <td class="hidden-xs">{{x.name}}</td>
 
                                             </tr>
                                             </tbody>
@@ -1430,7 +1430,7 @@
                                 <div class="tab-content">
                                     <div id="21" class="tab-pane fade in active">
                                         <div class="well" style="margin: 0;">Active Bills
-                                            <span> <input type="text" ng-model="q4" id="search21" style="float: right"
+                                            <span> <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q4" id="search21" style="float: right"
                                                           placeholder="Search"
                                             ></span>
 
@@ -1491,7 +1491,7 @@
                                     </div>
                                     <div id="22" class="tab-pane fade">
                                         <div class="well" style="margin: 0;"><span>New Bills</span>
-                                            <input type="text" ng-model="q5" id="search22" style="float: right"
+                                            <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q5" id="search22" style="float: right"
                                                    placeholder="Search">
 
                                         </div>
@@ -1678,7 +1678,7 @@
                                     </tbody>
                                 </table>
                                 <object data="{{billdet.billurl}}" type="application/pdf"
-                                        style="height: 600px;width: 100%"></object>
+                                        style="height: 400px;width: 100%"></object>
                             </div>
 
                         </div>
@@ -1699,7 +1699,7 @@
                     <div class="tab-content">
                         <div id="31" class="tab-pane fade in active">
                             <div class="well" style="margin: 0;">House
-                                <input type="text" ng-model="q6" id="search31" style="float: right"
+                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q6" id="search31" style="float: right"
                                        placeholder="Search">
 
                             </div>
@@ -1759,7 +1759,7 @@
                         </div>
                         <div id="32" class="tab-pane fade">
                             <div class="well" style="margin: 0;">Senate
-                                <input type="text" ng-model="q7" id="search32" style="float: right"
+                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q7" id="search32" style="float: right"
                                        placeholder="Search">
 
                             </div>
@@ -1768,7 +1768,7 @@
                                     <table class=" table table-hover table-responsive">
                                         <thead>
                                         <tr>
-                                            <th></th>
+                                            <th> </th>
                                             <th>Chamber</th>
                                             <th>Committee ID</th>
                                             <th>Name</th>
@@ -1814,7 +1814,7 @@
                         </div>
                         <div id="33" class="tab-pane fade">
                             <div class="well" style="margin: 0;">Joint
-                                <input type="text" ng-model="q8" id="search33" style="float: right"
+                                <input class="col-xs-6 col-sm-6 col-md-2 col-lg-2" type="text" ng-model="q8" id="search33" style="float: right"
                                        placeholder="Search">
 
                             </div>
@@ -1876,9 +1876,9 @@
                 <hr>
                 <div style="border: solid 1px lightgray;border-radius: 5px ">
                     <ul class="nav nav-tabs" style="background-color: white">
-                        <li id="tab41" class="active"><a data-toggle="tab" href="#41">Legislators</a></li>
-                        <li id="tab42"><a data-toggle="tab" href="#42">Bills</a></li>
-                        <li id="tab43"><a data-toggle="tab" href="#43">Committees</a></li>
+                        <li id="tab41" class="active"><a data-toggle="tab" href="#41" style="padding: 10px">Legislators</a></li>
+                        <li id="tab42"><a data-toggle="tab" href="#42"style="padding: 12px" >Bills</a></li>
+                        <li id="tab43"><a data-toggle="tab" href="#43" style="padding: 12px">Committees</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="41" class="tab-pane fade in active">
